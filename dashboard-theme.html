@@ -49,14 +49,18 @@
   
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const selectedThemeJSON = localStorage.getItem('aura_selected_theme');
+      let theme = null;
+      try {
+        theme = JSON.parse(localStorage.getItem('aura_selected_theme'));
+      } catch (error) {
+        theme = null;
+      }
       
-      if (selectedThemeJSON) {
-        const theme = JSON.parse(selectedThemeJSON);
+      if (theme && theme.name) {
         
         document.getElementById('theme-title').innerText = theme.name;
         document.getElementById('theme-description').innerText = theme.description;
-        document.getElementById('theme-date').innerText = 'Selected on: ' + theme.dateSelected;
+        document.getElementById('theme-date').innerText = 'Selected on: ' + (theme.dateSelected || 'today');
         
         if (theme.image) {
           document.getElementById('theme-image').src = theme.image;

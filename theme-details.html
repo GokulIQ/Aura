@@ -43,6 +43,8 @@
     /* Sticky Pricing Card */
     .pricing-card-wrapper { position: sticky; top: 120px; }
     .pricing-card { padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(var(--accent-rgb, 128, 0, 32), 0.1); }
+    .pricing-actions { display: grid; gap: 1rem; width: 100%; }
+    .pricing-actions .btn { width: 100%; min-width: 0; min-height: 3.5rem; padding: 0.875rem 1rem; white-space: normal; text-align: center; }
 
     /* Badges */
     .badge-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -64,6 +66,11 @@
       .theme-gallery-side { height: 100px; }
       .highlights-grid { grid-template-columns: 1fr; }
       .checklist-grid { grid-template-columns: 1fr; }
+      .pricing-card { padding: 1.5rem; }
+      .pricing-actions { gap: 0.75rem; }
+    }
+    @media (max-width: 360px) {
+      .pricing-actions .btn { min-height: 3.25rem; padding-inline: 0.75rem; font-size: 0.9375rem; }
     }
   </style>
 </head>
@@ -214,8 +221,10 @@
                   <p class="text-sm text-muted mb-2"><i class="bi bi-house me-1"></i> Subject to venue size</p>
                   <p class="text-sm text-muted mb-0"><i class="bi bi-people me-1"></i> Scalable for guest count</p>
                 </div>
-                <a href="dashboard.html" class="btn btn-accent w-full mb-4" id="select-theme-btn">Select This Theme</a>
-                <button class="btn btn-primary w-full"><i class="bi bi-heart"></i> Save to Favorites</button>
+                <div class="pricing-actions">
+                  <a href="dashboard.html" class="btn btn-accent" id="select-theme-btn">Select This Theme</a>
+                  <button class="btn btn-primary" type="button" id="favorite-theme-btn"><i class="bi bi-heart"></i> Save to Favorites</button>
+                </div>
               </div>
             </div>
           </div>
@@ -240,12 +249,75 @@
         </div>
       `;
 
-      // Trigger AppHeader's global link update for "Plan My Event" behavior if applicable
-      // We manually intercept the "Select This Theme" button just like AppHeader did
-      const isAuth = localStorage.getItem("festivo_auth") === "true";
       const selectBtn = document.getElementById("select-theme-btn");
-      if(selectBtn) {
-        selectBtn.href = isAuth ? "services.html" : "login.html?redirect=services.html";
+      const favoriteBtn = document.getElementById("favorite-theme-btn");
+      const selectedTheme = {
+        id: theme.id,
+        name: theme.name,
+        category: theme.category,
+        price: theme.price,
+        image: theme.heroImage,
+        description: theme.description,
+        dateSelected: new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+      };
+
+      const readFavorites = () => {
+        try {
+          const storedFavorites = JSON.parse(localStorage.getItem("aura_favorite_themes"));
+          return Array.isArray(storedFavorites) ? storedFavorites : [];
+        } catch (error) {
+          return [];
+        }
+      };
+
+      const isFavorite = (favorites) => favorites.some((favorite) =>
+        typeof favorite === "string"
+          ? favorite === selectedTheme.name
+          : favorite && (favorite.id === selectedTheme.id || favorite.name === selectedTheme.name)
+      );
+
+      const updateFavoriteButton = (saved) => {
+        favoriteBtn.innerHTML = saved
+          ? '<i class="bi bi-heart-fill"></i> Saved to Favorites'
+          : '<i class="bi bi-heart"></i> Save to Favorites';
+        favoriteBtn.setAttribute("aria-pressed", String(saved));
+      };
+
+      if (selectBtn) {
+        selectBtn.addEventListener("click", (event) => {
+          event.preventDefault();
+          localStorage.setItem("aura_selected_theme", JSON.stringify(selectedTheme));
+          selectBtn.innerHTML = '<i class="bi bi-check2-circle"></i> Theme Selected';
+          selectBtn.setAttribute("aria-disabled", "true");
+          window.location.href = "dashboard-theme.html";
+        });
+      }
+
+      if (favoriteBtn) {
+        let favorites = readFavorites();
+        updateFavoriteButton(isFavorite(favorites));
+
+        favoriteBtn.addEventListener("click", () => {
+          const alreadySaved = isFavorite(favorites);
+
+          if (alreadySaved) {
+            favorites = favorites.filter((favorite) =>
+              typeof favorite === "string"
+                ? favorite !== selectedTheme.name
+                : favorite && favorite.id !== selectedTheme.id && favorite.name !== selectedTheme.name
+            );
+            window.alert(`${selectedTheme.name} was removed from your favorites.`);
+          } else {
+            favorites.push({
+              ...selectedTheme,
+              dateFavorited: new Date().toISOString()
+            });
+            window.alert(`${selectedTheme.name} was added to your favorites.`);
+          }
+
+          localStorage.setItem("aura_favorite_themes", JSON.stringify(favorites));
+          updateFavoriteButton(!alreadySaved);
+        });
       }
     }
   </script>

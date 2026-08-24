@@ -2,9 +2,9 @@
 class AppFooter extends HTMLElement {
   connectedCallback() {
     const logoSvg = `
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
-        <path d="M14 2L2 26H7.5L14 13L20.5 26H26L14 2Z" fill="currentColor"/>
-        <path d="M10.5 20H17.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <svg class="footer-logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <circle cx="20" cy="20" r="19" fill="currentColor"/>
+        <path d="M13.5 27.6L20 12.4L26.5 27.6M16.25 22.15H23.75" stroke="#FFFFFF" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     `;
 
@@ -13,7 +13,7 @@ class AppFooter extends HTMLElement {
         <div class="container">
           <div class="grid grid-cols-4 gap-8">
             <div class="footer-col">
-              <a href="index.html" class="logo d-flex align-center text-accent mb-4">
+              <a href="index.html" class="logo d-flex align-center text-accent mb-4" aria-label="Aura home">
                 ${logoSvg}
                 <h2 class="serif" style="margin-bottom: 0;">Aura.</h2>
               </a>
@@ -66,8 +66,14 @@ class AppFooter extends HTMLElement {
         margin-top: 4rem;
         padding-bottom: 2rem;
       }
-      .logo { text-decoration: none; }
-      .logo h2 { font-size: 1.75rem; color: inherit; }
+      .app-footer .logo { text-decoration: none; gap: 0.6rem; }
+      .footer-logo-mark { width: 2rem; height: 2rem; flex: 0 0 2rem; display: block; }
+      .app-footer .logo h2 { margin: 0; font-size: 1.75rem; line-height: 1; color: inherit; letter-spacing: -0.025em; }
+      @media (max-width: 480px) {
+        .app-footer .logo { gap: 0.5rem; }
+        .footer-logo-mark { width: 1.8rem; height: 1.8rem; flex-basis: 1.8rem; }
+        .app-footer .logo h2 { font-size: 1.55rem; }
+      }
       .footer-links {
         display: flex;
         flex-direction: column;

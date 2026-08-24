@@ -32,16 +32,16 @@ class AppHeader extends HTMLElement {
     }
 
     const logoSvg = `
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
-        <path d="M14 2L2 26H7.5L14 13L20.5 26H26L14 2Z" fill="currentColor"/>
-        <path d="M10.5 20H17.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+        <circle cx="20" cy="20" r="19" fill="currentColor"/>
+        <path d="M13.5 27.6L20 12.4L26.5 27.6M16.25 22.15H23.75" stroke="#FFFFFF" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
     `;
 
     this.innerHTML = `
       <header class="app-header">
         <div class="container d-flex align-center justify-between">
-          <a href="index.html" class="logo d-flex align-center text-accent">
+          <a href="index.html" class="logo d-flex align-center text-accent" aria-label="Aura home">
             ${logoSvg}
             <h2 class="serif" style="margin-bottom: 0;">Aura.</h2>
           </a>
@@ -112,8 +112,14 @@ class AppHeader extends HTMLElement {
         padding: 1rem 0;
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
       }
-      .logo { text-decoration: none; }
-      .logo h2 { font-size: 1.75rem; color: inherit; }
+      .logo { text-decoration: none; gap: 0.6rem; flex-shrink: 0; }
+      .logo-mark { width: 2rem; height: 2rem; flex: 0 0 2rem; display: block; }
+      .logo h2 { margin: 0; font-size: 1.75rem; line-height: 1; color: inherit; letter-spacing: -0.025em; }
+      @media (max-width: 480px) {
+        .logo { gap: 0.5rem; }
+        .logo-mark { width: 1.8rem; height: 1.8rem; flex-basis: 1.8rem; }
+        .logo h2 { font-size: 1.55rem; }
+      }
       
       .nav-links { list-style: none; margin: 0; padding: 0; }
       .nav-links a:not(.btn) { font-weight: 500; color: var(--text-dark); }
