@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="components/AppHeader.js" defer></script>
   <script src="components/AppFooter.js" defer></script>
+  <script src="assets/js/theme-selection.js" defer></script>
   <style>
     .theme-gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 4rem; }
     .theme-gallery-main { border-radius: var(--radius-lg); overflow: hidden; height: 500px; box-shadow: var(--neo-shadow); }
@@ -45,7 +46,7 @@
       
       <div class="theme-gallery">
         <div class="theme-gallery-main">
-          <img src="assets/Boho Celebration.jpg" alt="Bohemian Dream">
+          <img class="main-img" src="assets/Boho Celebration.jpg" alt="Bohemian Dream">
         </div>
         <div class="theme-gallery-side">
           <div class="theme-gallery-side-img"><img src="assets/Bohemian Floral Backdrop2.jpg" alt="Detail 1"></div>
@@ -74,10 +75,10 @@
 
         <div class="card card-inset text-center">
           <h3 class="mb-2">Starting at</h3>
-          <h2 class="text-accent mb-6" style="font-size: 2.5rem;">?15,000</h2>
+          <h2 class="text-accent mb-6" style="font-size: 2.5rem;">₹15,000</h2>
           <p class="text-sm text-muted mb-6">Price may vary based on venue size and guest count.</p>
-          <a href="dashboard.html" class="btn btn-accent w-full mb-4">Select This Theme</a>
-          <button class="btn btn-primary w-full"><i class="bi bi-heart"></i> Save to Favorites</button>
+          <a href="#" id="btn-select-theme" class="btn btn-accent w-full mb-4">Select This Theme</a>
+          <button id="btn-favorite-theme" class="btn btn-primary w-full"><i class="bi bi-heart"></i> Save to Favorites</button>
         </div>
       </div>
     </div>

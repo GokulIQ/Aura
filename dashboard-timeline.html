@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
@@ -9,17 +9,222 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
   <script src="components/AppHeader.js" defer></script>
   <script src="components/AppFooter.js" defer></script>
   <script src="components/DashboardSidebar.js" defer></script>
   <style>
-    .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
-    .timeline { position: relative; padding-left: 2rem; margin-top: 2rem; }
-    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--shadow-dark-color); }
-    .timeline-item { position: relative; margin-bottom: 2rem; }
-    .timeline-item::before { content: ''; position: absolute; left: -2.4rem; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--accent-color); border: 4px solid var(--bg-color); box-shadow: var(--neo-shadow-sm); }
-    .timeline-time { font-weight: 600; color: var(--accent-color); margin-bottom: 0.25rem; }
-    @media (max-width: 1024px) { .dashboard-layout { grid-template-columns: 1fr; } }
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* ── Timeline Header ── */
+    .timeline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .timeline-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .timeline-header-left h2 {
+      margin: 0;
+    }
+    .timeline-event-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      background: var(--bg-color);
+      box-shadow: var(--neo-inset-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-color);
+    }
+
+    /* ── Timeline Wrapper ── */
+    .timeline-v2 {
+      position: relative;
+      padding: 2rem 0 1rem;
+    }
+    .timeline-v2::before {
+      content: '';
+      position: absolute;
+      left: 28px;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, var(--success), var(--accent-color), var(--shadow-dark-color));
+      border-radius: var(--radius-full);
+    }
+
+    /* ── Timeline Item ── */
+    .tl-item {
+      position: relative;
+      padding-left: 72px;
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: tl-fade-in 0.5s ease forwards;
+    }
+    .tl-item:nth-child(1) { animation-delay: 0.1s; }
+    .tl-item:nth-child(2) { animation-delay: 0.2s; }
+    .tl-item:nth-child(3) { animation-delay: 0.3s; }
+    .tl-item:nth-child(4) { animation-delay: 0.4s; }
+    .tl-item:nth-child(5) { animation-delay: 0.5s; }
+    .tl-item:nth-child(6) { animation-delay: 0.6s; }
+
+    @keyframes tl-fade-in {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── Timeline Node (Circle Icon) ── */
+    .tl-node {
+      position: absolute;
+      left: 8px;
+      top: 8px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      z-index: 2;
+      transition: var(--transition);
+    }
+    .tl-node.done {
+      background: var(--success);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    .tl-node.active {
+      background: var(--accent-color);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(252, 165, 165, 0.4);
+      animation: node-pulse 2.5s ease-in-out infinite;
+    }
+    .tl-node.pending {
+      background: var(--bg-color);
+      color: var(--text-muted);
+      box-shadow: var(--neo-shadow-sm);
+    }
+    @keyframes node-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* ── Timeline Card ── */
+    .tl-card {
+      background: var(--bg-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neo-shadow-sm);
+      padding: 1.25rem 1.5rem;
+      transition: var(--transition);
+    }
+    .tl-card:hover {
+      box-shadow: var(--neo-shadow);
+      transform: translateX(4px);
+    }
+    .tl-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .tl-time {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      white-space: nowrap;
+    }
+    .tl-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+    .tl-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .tl-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-full);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .tl-badge.done {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success);
+    }
+    .tl-badge.in-progress {
+      background: rgba(252, 165, 165, 0.15);
+      color: var(--accent-color);
+    }
+    .tl-badge.upcoming {
+      background: rgba(107, 114, 128, 0.12);
+      color: var(--text-muted);
+    }
+
+    /* ── Approval Banner ── */
+    .approval-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      background: var(--bg-color);
+      box-shadow: var(--neo-inset-sm);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .approval-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .approval-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--warning);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 1024px) {
+      .dashboard-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .tl-item { padding-left: 60px; }
+      .tl-node { width: 36px; height: 36px; font-size: 0.9rem; left: 10px; }
+      .timeline-v2::before { left: 26px; }
+    }
   </style>
 </head>
 <body>
@@ -29,40 +234,126 @@
       <div class="dashboard-layout">
         <dashboard-sidebar active="timeline"></dashboard-sidebar>
         <div class="dash-content">
-          <div class="d-flex justify-between align-center mb-6">
-            <h2 class="serif">Event Timeline</h2>
-            <button class="btn btn-accent">Approve Timeline</button>
-          </div>
-          <div class="card">
-            <div class="badge warning mb-4">Pending Client Approval</div>
-            <div class="timeline">
-              <div class="timeline-item">
-                <div class="timeline-time">10:00 AM</div>
-                <h4 class="mb-1">Venue Preparation</h4>
-                <p class="text-muted text-sm">Our team arrives and begins structural setup.</p>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-time">11:30 AM</div>
-                <h4 class="mb-1">Decoration Setup</h4>
-                <p class="text-muted text-sm">Theme installation, florals, and balloon arch setup.</p>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-time">01:00 PM</div>
-                <h4 class="mb-1">Photography Setup</h4>
-                <p class="text-muted text-sm">Photographer arrives to set up lighting and backdrop tests.</p>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-time">02:00 PM</div>
-                <h4 class="mb-1">Guest Arrival</h4>
-                <p class="text-muted text-sm">Welcome drinks and seating assistance.</p>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-time">04:00 PM</div>
-                <h4 class="mb-1">Cake Cutting Ceremony</h4>
-                <p class="text-muted text-sm">Main event coordination and photography.</p>
+
+          <!-- Header -->
+          <div class="timeline-header mb-6">
+            <div class="timeline-header-left">
+              <h2 class="serif">Event Timeline</h2>
+              <div class="timeline-event-date">
+                <i class="bi bi-calendar3"></i>
+                15 Sep 2026
               </div>
             </div>
+            <button class="btn btn-accent" id="approveBtn">
+              <i class="bi bi-check2-circle"></i> Approve Timeline
+            </button>
           </div>
+
+          <div class="card">
+            <!-- Approval Banner -->
+            <div class="approval-banner">
+              <div class="approval-banner-left">
+                <div class="approval-icon">
+                  <i class="bi bi-clock-history"></i>
+                </div>
+                <div>
+                  <p style="font-weight: 700; font-size: 0.9rem;">Pending Client Approval</p>
+                  <p class="text-muted" style="font-size: 0.8rem;">Review the schedule below and click "Approve" to confirm.</p>
+                </div>
+              </div>
+              <span class="tl-badge in-progress"><i class="bi bi-hourglass-split"></i> Awaiting</span>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-v2">
+
+              <div class="tl-item">
+                <div class="tl-node done"><i class="bi bi-tools"></i></div>
+                <div class="tl-card">
+                  <div class="tl-card-header">
+                    <div>
+                      <span class="tl-time"><i class="bi bi-clock"></i> 10:00 AM</span>
+                      <h4 class="tl-title">Venue Preparation</h4>
+                    </div>
+                    <span class="tl-badge done"><i class="bi bi-check-circle-fill"></i> Done</span>
+                  </div>
+                  <p class="tl-desc">Our team arrives and begins structural setup — tables, chairs, stage, and entry arches.</p>
+                </div>
+              </div>
+
+              <div class="tl-item">
+                <div class="tl-node done"><i class="bi bi-flower1"></i></div>
+                <div class="tl-card">
+                  <div class="tl-card-header">
+                    <div>
+                      <span class="tl-time"><i class="bi bi-clock"></i> 11:30 AM</span>
+                      <h4 class="tl-title">Decoration Setup</h4>
+                    </div>
+                    <span class="tl-badge done"><i class="bi bi-check-circle-fill"></i> Done</span>
+                  </div>
+                  <p class="tl-desc">Theme installation, florals, balloon arch setup, and photo corner decoration.</p>
+                </div>
+              </div>
+
+              <div class="tl-item">
+                <div class="tl-node active"><i class="bi bi-camera-fill"></i></div>
+                <div class="tl-card">
+                  <div class="tl-card-header">
+                    <div>
+                      <span class="tl-time"><i class="bi bi-clock"></i> 01:00 PM</span>
+                      <h4 class="tl-title">Photography Setup</h4>
+                    </div>
+                    <span class="tl-badge in-progress"><i class="bi bi-arrow-repeat"></i> In Progress</span>
+                  </div>
+                  <p class="tl-desc">Photographer arrives to set up lighting rigs and run backdrop test shots.</p>
+                </div>
+              </div>
+
+              <div class="tl-item">
+                <div class="tl-node pending"><i class="bi bi-people"></i></div>
+                <div class="tl-card">
+                  <div class="tl-card-header">
+                    <div>
+                      <span class="tl-time"><i class="bi bi-clock"></i> 02:00 PM</span>
+                      <h4 class="tl-title">Guest Arrival</h4>
+                    </div>
+                    <span class="tl-badge upcoming"><i class="bi bi-circle"></i> Upcoming</span>
+                  </div>
+                  <p class="tl-desc">Welcome drinks and seating assistance. Usher team ready at entrance.</p>
+                </div>
+              </div>
+
+              <div class="tl-item">
+                <div class="tl-node pending"><i class="bi bi-cake2"></i></div>
+                <div class="tl-card">
+                  <div class="tl-card-header">
+                    <div>
+                      <span class="tl-time"><i class="bi bi-clock"></i> 04:00 PM</span>
+                      <h4 class="tl-title">Cake Cutting Ceremony</h4>
+                    </div>
+                    <span class="tl-badge upcoming"><i class="bi bi-circle"></i> Upcoming</span>
+                  </div>
+                  <p class="tl-desc">Main event coordination, photography, and cake cutting moment.</p>
+                </div>
+              </div>
+
+              <div class="tl-item">
+                <div class="tl-node pending"><i class="bi bi-music-note-beamed"></i></div>
+                <div class="tl-card">
+                  <div class="tl-card-header">
+                    <div>
+                      <span class="tl-time"><i class="bi bi-clock"></i> 06:00 PM</span>
+                      <h4 class="tl-title">Party & Wrap Up</h4>
+                    </div>
+                    <span class="tl-badge upcoming"><i class="bi bi-circle"></i> Upcoming</span>
+                  </div>
+                  <p class="tl-desc">DJ entertainment, party games, and venue teardown coordination.</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -70,5 +361,3 @@
   <app-footer></app-footer>
 </body>
 </html>
-
-

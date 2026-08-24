@@ -1,0 +1,425 @@
+/* ═══════════════════════════════════════════════════════
+   Aura Dashboard — Shared Layout & Components
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Global box-sizing safety ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ── Dashboard Grid Layout ── */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  min-height: calc(100vh - 200px);
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ── Grid children must respect boundaries ── */
+.dashboard-layout > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* ── Sidebar Overrides ── */
+.dashboard-sidebar {
+  padding: 1.5rem 1.25rem !important;
+  position: sticky;
+  top: 100px;
+  border-radius: var(--radius-lg) !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+.dashboard-sidebar .user-profile {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--shadow-dark-color);
+  margin-bottom: 1rem !important;
+}
+.dashboard-sidebar .avatar {
+  width: 64px;
+  height: 64px;
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem !important;
+}
+.dashboard-sidebar h4 {
+  font-size: 0.95rem;
+}
+.dashboard-sidebar .text-sm {
+  font-size: 0.75rem;
+}
+.dashboard-sidebar .dash-nav a {
+  padding: 0.75rem 0.875rem;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+  gap: 0.65rem;
+}
+.dashboard-sidebar .dash-nav a i {
+  font-size: 1rem;
+  width: 20px;
+  text-align: center;
+}
+
+/* ── Dashboard Content Area ── */
+.dash-content {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+.dash-content h2.serif {
+  font-size: 1.6rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.dash-content h3.serif {
+  font-size: 1.15rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ── Enhanced Card Styles ── */
+.dash-content .card {
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.dash-content .card-inset {
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  box-sizing: border-box;
+}
+
+/* ── Stat Cards Row ── */
+.dash-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1.25rem !important;
+  min-width: 0;
+}
+.dash-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-color);
+  box-shadow: var(--neo-inset-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  flex-shrink: 0;
+}
+.dash-stat-card h4 {
+  font-size: 1.1rem;
+}
+.dash-stat-card .text-sm {
+  font-size: 0.8rem;
+}
+
+/* ── Badges (shared) ── */
+.badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.65rem;
+}
+
+/* ── Invoice Card Rows ── */
+.invoice-card {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--shadow-dark-color);
+  transition: background 0.2s ease;
+}
+.invoice-card:last-child {
+  border-bottom: none;
+}
+.invoice-card:hover {
+  background: rgba(var(--bg-rgb), 0.5);
+}
+.invoice-card h4 {
+  font-size: 0.95rem;
+}
+.invoice-card .text-sm {
+  font-size: 0.8rem;
+}
+.invoice-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* ── Vendor List Items ── */
+.vendor-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--shadow-dark-color);
+  gap: 1rem;
+  transition: background 0.2s ease;
+}
+.vendor-list-item:last-child {
+  border-bottom: none;
+}
+.vendor-list-item:hover {
+  background: rgba(var(--bg-rgb), 0.5);
+}
+
+/* ── Checklist Items ── */
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--shadow-dark-color);
+}
+.checklist-item:last-child {
+  border-bottom: none;
+}
+.check-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--bg-color);
+  box-shadow: var(--neo-inset-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: transparent;
+  font-size: 0.75rem;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.check-box.checked {
+  background: var(--accent-color);
+  color: var(--btn-text-color);
+  box-shadow: none;
+}
+.checklist-item.checked h4 {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+.checklist-item h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ── Theme Preview ── */
+.theme-preview-img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Responsive Breakpoints
+   ═══════════════════════════════════════════════════════ */
+
+/* Tablet — single column, horizontal sidebar */
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .dashboard-sidebar {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  /* Sidebar profile horizontal */
+  .dashboard-sidebar .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--shadow-dark-color);
+  }
+  .dashboard-sidebar .avatar {
+    margin: 0 !important;
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+  .dashboard-sidebar .dash-nav ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .dashboard-sidebar .dash-nav a {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  /* Ensure html/body don't overflow */
+  html, body {
+    max-width: 100vw;
+  }
+
+  .dashboard-layout {
+    gap: 0.75rem;
+  }
+
+  /* Section padding reduced */
+  .section {
+    padding: 2rem 0 !important;
+  }
+
+  /* Container tighter */
+  .container {
+    padding: 0 1rem;
+  }
+
+  /* Content area */
+  .dash-content {
+    width: 100%;
+    max-width: 100%;
+  }
+  .dash-content h2.serif {
+    font-size: 1.25rem;
+  }
+  .dash-content h3.serif {
+    font-size: 1rem;
+  }
+
+  /* Cards: tighter padding, no overflow from shadows */
+  .dash-content .card {
+    padding: 1rem;
+    box-shadow: var(--neo-shadow-sm);
+  }
+  .dash-content .card-inset {
+    padding: 0.875rem;
+  }
+
+  /* Reduce margin-bottom utilities */
+  .mb-8 {
+    margin-bottom: 1.5rem;
+  }
+  .mb-6 {
+    margin-bottom: 1rem;
+  }
+
+  /* Invoice cards stack */
+  .invoice-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+  .invoice-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Vendor items stack */
+  .vendor-list-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  /* Stats grid — single column on mobile */
+  .grid-cols-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Theme preview shorter */
+  .theme-preview-img {
+    height: 200px;
+  }
+
+  /* Sidebar nav: horizontal scroll */
+  .dashboard-sidebar {
+    padding: 0.875rem !important;
+    box-shadow: var(--neo-shadow-sm) !important;
+  }
+  .dashboard-sidebar .user-profile {
+    gap: 0.75rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem !important;
+  }
+  .dashboard-sidebar .avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    box-shadow: none;
+  }
+  .dashboard-sidebar .user-profile .mb-4 {
+    margin-bottom: 0 !important;
+  }
+  .dashboard-sidebar .dash-nav ul {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+  }
+  .dashboard-sidebar .dash-nav ul::-webkit-scrollbar {
+    display: none;
+  }
+  .dashboard-sidebar .dash-nav a {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Small mobile (320–414px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .dash-content h2.serif {
+    font-size: 1.15rem;
+  }
+
+  /* Stat cards */
+  .dash-stat-card {
+    padding: 0.875rem !important;
+    gap: 0.65rem;
+  }
+  .dash-stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  .dash-stat-card h4 {
+    font-size: 0.95rem;
+  }
+  .dash-stat-card .text-sm {
+    font-size: 0.7rem;
+  }
+
+  /* 2-col stat grid → 1-col */
+  .grid.grid-cols-2 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Reduce card padding further */
+  .dash-content .card {
+    padding: 0.875rem;
+  }
+
+  /* Section padding */
+  .section {
+    padding: 1.5rem 0 !important;
+  }
+}

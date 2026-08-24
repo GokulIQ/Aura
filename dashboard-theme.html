@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
   <script src="components/AppHeader.js" defer></script>
   <script src="components/AppFooter.js" defer></script>
   <script src="components/DashboardSidebar.js" defer></script>
@@ -27,24 +28,51 @@
         <div class="dash-content">
           <div class="d-flex justify-between align-center mb-6">
             <h2 class="serif">Current Selected Theme</h2>
-            <span class="badge success">Confirmed</span>
+            <span class="badge success" id="theme-status-badge">Confirmed</span>
           </div>
           
-          <div class="card">
-            <img src="assets/Boho Celebration.jpg" alt="Selected Theme" class="theme-preview-img">
-            <div class="d-flex justify-between align-center">
-              <div>
-                <h3 class="serif mb-2">Bohemian Floral Dream</h3>
-                <p class="text-muted">Selected on: 12 August 2026</p>
-                <p class="text-muted mt-2">A beautiful mix of macrame, dried florals, and warm ambient lighting. Perfect for evening birthday celebrations.</p>
+          <div class="card" id="theme-card">
+            <img src="assets/Boho Celebration.jpg" alt="Selected Theme" class="theme-preview-img" id="theme-image">
+            <div class="d-flex justify-between align-center theme-details-container" style="flex-wrap: wrap; gap: 1rem;">
+              <div style="flex: 1; min-width: 0;">
+                <h3 class="serif mb-2" id="theme-title">Bohemian Floral Dream</h3>
+                <p class="text-muted" id="theme-date">Selected on: 12 August 2026</p>
+                <p class="text-muted mt-2" id="theme-description">A beautiful mix of macrame, dried florals, and warm ambient lighting. Perfect for evening birthday celebrations.</p>
               </div>
-              <button class="btn btn-primary" onclick="alert('Change theme modal will open.')">Change Theme</button>
+              <a href="themes.html" class="btn btn-primary" style="flex-shrink: 0; white-space: nowrap;">Change Theme</a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </main>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const selectedThemeJSON = localStorage.getItem('aura_selected_theme');
+      
+      if (selectedThemeJSON) {
+        const theme = JSON.parse(selectedThemeJSON);
+        
+        document.getElementById('theme-title').innerText = theme.name;
+        document.getElementById('theme-description').innerText = theme.description;
+        document.getElementById('theme-date').innerText = 'Selected on: ' + theme.dateSelected;
+        
+        if (theme.image) {
+          document.getElementById('theme-image').src = theme.image;
+        }
+      } else {
+        // No theme selected
+        document.getElementById('theme-title').innerText = 'No Theme Selected';
+        document.getElementById('theme-description').innerText = 'You have not chosen a theme for your event yet. Browse our themes to find the perfect match!';
+        document.getElementById('theme-date').innerText = 'Status: Pending Selection';
+        document.getElementById('theme-status-badge').className = 'badge warning';
+        document.getElementById('theme-status-badge').innerText = 'Action Required';
+        document.getElementById('theme-image').style.display = 'none';
+        document.querySelector('.theme-details-container .btn-primary').innerText = 'Browse Themes';
+      }
+    });
+  </script>
   <app-footer></app-footer>
 </body>
 </html>

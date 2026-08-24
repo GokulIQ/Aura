@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
@@ -9,71 +9,313 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
   <script src="components/AppHeader.js" defer></script>
   <script src="components/AppFooter.js" defer></script>
   <script src="components/DashboardSidebar.js" defer></script>
   <style>
-    .dashboard-layout {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 2rem;
-      align-items: start;
-    }
-    .dash-stat-card {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .dash-stat-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: var(--radius-md);
-      background: var(--bg-color);
-      box-shadow: var(--neo-inset-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: var(--accent-color);
-    }
+    /* ── Page-specific styles (layout handled by dashboard.css) ── */
+
+    /* ── Progress Bar ── */
     .progress-bar-container {
       width: 100%;
-      height: 12px;
+      height: 10px;
       background: var(--bg-color);
       box-shadow: var(--neo-inset-sm);
       border-radius: var(--radius-full);
       overflow: hidden;
       margin-top: 1rem;
+      box-sizing: border-box;
     }
     .progress-bar {
       height: 100%;
-      background: var(--accent-color);
       border-radius: var(--radius-full);
-    }
-    .event-stage {
-      text-align: center;
+      background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
       position: relative;
+      transition: width 1s ease;
     }
-    .stage-dot {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      animation: shimmer 2s infinite;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* ── Status Badge ── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.875rem;
+      border-radius: var(--radius-full);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
       background: var(--bg-color);
       box-shadow: var(--neo-shadow-sm);
-      margin: 0 auto 0.5rem;
-      border: 3px solid transparent;
+      color: var(--accent-color);
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .stage-dot.completed { background: var(--success); }
-    .stage-dot.current { border-color: var(--accent-color); box-shadow: var(--neo-inset-sm); }
-    @media (max-width: 1024px) {
-      .dashboard-layout { grid-template-columns: 1fr; }
+    .status-badge .pulse-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      animation: pulse-glow 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(252, 165, 165, 0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(252, 165, 165, 0); }
+    }
+
+    /* ── Horizontal Stepper Timeline ── */
+    .stepper {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+      margin-top: 2rem;
+      padding: 0 0.5rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 40px;
+      right: 40px;
+      height: 3px;
+      background: var(--bg-color);
+      box-shadow: var(--neo-inset-sm);
+      border-radius: var(--radius-full);
+      z-index: 0;
+    }
+    .stepper-progress {
+      position: absolute;
+      top: 24px;
+      left: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--success), var(--accent-color));
+      border-radius: var(--radius-full);
+      z-index: 1;
+      transition: width 1s ease;
+    }
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      min-width: 0;
+    }
+    .step-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: var(--transition);
+      margin-bottom: 0.75rem;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    /* Completed Step */
+    .step.completed .step-circle {
+      background: var(--success);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+    .step.completed .step-label { color: var(--text-dark); font-weight: 600; }
+    .step.completed .step-desc { color: var(--success); }
+
+    /* Current Step */
+    .step.current .step-circle {
+      background: var(--accent-color);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(252, 165, 165, 0.4);
+      animation: step-pulse 2.5s ease-in-out infinite;
+    }
+    .step.current .step-circle::after {
+      content: '';
+      position: absolute;
+      inset: -5px;
+      border-radius: 50%;
+      border: 2px dashed var(--accent-color);
+      opacity: 0.5;
+      animation: spin 8s linear infinite;
+    }
+    @keyframes step-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .step.current .step-label { color: var(--accent-color); font-weight: 700; }
+    .step.current .step-desc { color: var(--accent-color); opacity: 0.8; }
+
+    /* Upcoming Step */
+    .step.upcoming .step-circle {
+      background: var(--bg-color);
+      color: var(--text-muted);
+      box-shadow: var(--neo-shadow-sm);
+    }
+    .step.upcoming .step-label { color: var(--text-muted); font-weight: 500; }
+    .step.upcoming .step-desc { color: var(--text-muted); opacity: 0.6; }
+
+    /* Step Labels */
+    .step-label { font-size: 0.85rem; text-align: center; line-height: 1.3; }
+    .step-desc { font-size: 0.7rem; margin-top: 0.25rem; text-align: center; }
+    .step-info { display: flex; flex-direction: column; align-items: center; min-width: 0; }
+
+    /* ── Event Header Card ── */
+    .event-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .event-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.875rem;
+      border-radius: var(--radius-full);
+      background: var(--bg-color);
+      box-shadow: var(--neo-inset-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-color);
+      white-space: nowrap;
+    }
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+    .progress-text span { font-size: 0.85rem; font-weight: 600; }
+    .progress-text .percent { color: var(--accent-color); }
+    .progress-text .label { color: var(--text-muted); }
+
+    /* ── Dashboard Welcome Row ── */
+    .dash-welcome {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .dash-welcome h2 { margin: 0; }
+    .dash-welcome p { margin: 0; }
+
+    /* ═══════════════════════════════════════════════════
+       MOBILE — Stepper vertical layout
+       ═══════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      /* Welcome row: stack vertically */
+      .dash-welcome {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+
+      /* Event header: stack on mobile */
+      .event-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      .event-date {
+        font-size: 0.8rem;
+        padding: 0.35rem 0.75rem;
+      }
+
+      .progress-text span { font-size: 0.75rem; }
+
+      /* Stepper: switch to vertical */
+      .stepper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0;
+        padding: 0;
+        margin-top: 1.5rem;
+      }
+      .stepper::before {
+        left: 19px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        height: auto;
+        right: auto;
+      }
+      .stepper-progress {
+        display: none;
+      }
+      .step {
+        flex-direction: row;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.5rem 0;
+      }
+      .step-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 0.95rem;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+      .step.current .step-circle::after {
+        inset: -3px;
+      }
+      .step-info {
+        align-items: flex-start;
+      }
+      .step-label {
+        font-size: 0.85rem;
+        text-align: left;
+      }
+      .step-desc {
+        text-align: left;
+        margin-top: 0.1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .status-badge {
+        font-size: 0.6rem;
+        padding: 0.3rem 0.65rem;
+      }
+      .step-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 0.85rem;
+      }
+      .stepper::before {
+        left: 17px;
+      }
     }
   </style>
 </head>
 <body>
   <app-header></app-header>
 
-  <main class="section" style="padding-top: 3rem;">
+  <main class="section" style="padding-top: 2rem;">
     <div class="container">
       <div class="dashboard-layout">
         <!-- Sidebar Component -->
@@ -81,45 +323,77 @@
 
         <!-- Main Content -->
         <div class="dash-content">
-          <div class="d-flex justify-between align-center mb-6">
+          <div class="dash-welcome">
             <div>
               <h2 class="serif" id="welcome-heading">Welcome back, Sarah</h2>
               <p class="text-muted">Here is the status of your upcoming celebration.</p>
             </div>
-            <span class="badge info">Planning in Progress</span>
+            <div class="status-badge">
+              <span class="pulse-dot"></span>
+              Planning in Progress
+            </div>
           </div>
 
-          <!-- Event Summary -->
+          <!-- Event Summary Card -->
           <div class="card mb-8">
-            <div class="d-flex justify-between align-center mb-4">
+            <div class="event-header mb-4">
               <h3 class="serif" id="event-heading">Sarah's 25th Birthday</h3>
-              <p class="text-accent font-semibold"><i class="bi bi-calendar-event"></i> 15 September 2026</p>
+              <div class="event-date">
+                <i class="bi bi-calendar-event"></i>
+                15 September 2026
+              </div>
             </div>
+
             <div class="progress-bar-container">
               <div class="progress-bar" style="width: 65%;"></div>
             </div>
-            <p class="text-right text-sm text-muted mt-2">65% Completed</p>
+            <div class="progress-text">
+              <span class="label">Overall Progress</span>
+              <span class="percent">65% Completed</span>
+            </div>
 
-            <div class="grid grid-cols-5 gap-4 mt-6">
-              <div class="event-stage">
-                <div class="stage-dot completed"></div>
-                <span class="text-sm">Booking</span>
+            <!-- Horizontal Stepper Timeline -->
+            <div class="stepper">
+              <div class="stepper-progress" style="width: 45%;"></div>
+
+              <div class="step completed">
+                <div class="step-circle"><i class="bi bi-bookmark-check-fill"></i></div>
+                <div class="step-info">
+                  <span class="step-label">Booking</span>
+                  <span class="step-desc">Confirmed</span>
+                </div>
               </div>
-              <div class="event-stage">
-                <div class="stage-dot completed"></div>
-                <span class="text-sm">Theme</span>
+
+              <div class="step completed">
+                <div class="step-circle"><i class="bi bi-palette-fill"></i></div>
+                <div class="step-info">
+                  <span class="step-label">Theme</span>
+                  <span class="step-desc">Selected</span>
+                </div>
               </div>
-              <div class="event-stage">
-                <div class="stage-dot current"></div>
-                <span class="text-sm">Vendors</span>
+
+              <div class="step current">
+                <div class="step-circle"><i class="bi bi-people-fill"></i></div>
+                <div class="step-info">
+                  <span class="step-label">Vendors</span>
+                  <span class="step-desc">3 of 4</span>
+                </div>
               </div>
-              <div class="event-stage">
-                <div class="stage-dot"></div>
-                <span class="text-sm">Planning</span>
+
+              <div class="step upcoming">
+                <div class="step-circle"><i class="bi bi-clipboard2-check"></i></div>
+                <div class="step-info">
+                  <span class="step-label">Planning</span>
+                  <span class="step-desc">Pending</span>
+                </div>
               </div>
-              <div class="event-stage">
-                <div class="stage-dot"></div>
-                <span class="text-sm">Execution</span>
+
+              <div class="step upcoming">
+                <div class="step-circle"><i class="bi bi-rocket-takeoff"></i></div>
+                <div class="step-info">
+                  <span class="step-label">Execution</span>
+                  <span class="step-desc">Pending</span>
+                </div>
               </div>
             </div>
           </div>
@@ -128,30 +402,30 @@
           <div class="grid grid-cols-2 gap-6">
             <div class="card dash-stat-card">
               <div class="dash-stat-icon"><i class="bi bi-people"></i></div>
-              <div>
+              <div style="min-width: 0;">
                 <p class="text-muted text-sm">Vendors Confirmed</p>
                 <h4>3 / 4</h4>
               </div>
             </div>
             <div class="card dash-stat-card">
               <div class="dash-stat-icon"><i class="bi bi-check2-square"></i></div>
-              <div>
+              <div style="min-width: 0;">
                 <p class="text-muted text-sm">Checklist</p>
                 <h4>18 / 25 completed</h4>
               </div>
             </div>
             <div class="card dash-stat-card">
               <div class="dash-stat-icon"><i class="bi bi-receipt"></i></div>
-              <div>
+              <div style="min-width: 0;">
                 <p class="text-muted text-sm">Total Invoice</p>
-                <h4>?35,000</h4>
+                <h4>₹35,000</h4>
               </div>
             </div>
             <div class="card dash-stat-card">
               <div class="dash-stat-icon"><i class="bi bi-cash"></i></div>
-              <div>
+              <div style="min-width: 0;">
                 <p class="text-muted text-sm">Outstanding</p>
-                <h4 class="text-danger">?12,000</h4>
+                <h4 class="text-danger">₹12,000</h4>
               </div>
             </div>
           </div>
@@ -176,6 +450,3 @@
   </script>
 </body>
 </html>
-
-
-

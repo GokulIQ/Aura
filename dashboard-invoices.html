@@ -1,22 +1,332 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoices & Payments — Aura</title>
+  <title>Invoices &amp; Payments — Aura</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
   <script src="components/AppHeader.js" defer></script>
   <script src="components/AppFooter.js" defer></script>
   <script src="components/DashboardSidebar.js" defer></script>
   <style>
     .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
-    .invoice-card { padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--shadow-dark-color); }
+
+    /* ── Invoice Row ── */
+    .invoice-card {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--shadow-dark-color);
+      transition: var(--transition);
+    }
     .invoice-card:last-child { border-bottom: none; }
-    @media (max-width: 1024px) { .dashboard-layout { grid-template-columns: 1fr; } .invoice-card { flex-direction: column; align-items: flex-start; gap: 1rem; } }
+    .invoice-card:hover { background: rgba(var(--bg-rgb), 0.5); }
+
+    .invoice-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    /* ── Summary Stat ── */
+    .stat-value { font-size: 1.5rem; font-weight: 800; }
+
+    /* ── Download Button ── */
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: var(--bg-color);
+      box-shadow: var(--neo-shadow-sm);
+      color: var(--accent-color);
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .btn-download:hover {
+      box-shadow: var(--neo-inset-sm);
+      color: var(--accent-hover);
+    }
+
+    /* ── Pay Now Button ── */
+    .btn-pay {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius-full);
+      border: none;
+      background: var(--accent-color);
+      color: var(--btn-text-color);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+      transition: var(--transition);
+      font-family: var(--font-sans);
+    }
+    .btn-pay:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ── Modal Overlay ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(6px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.active { display: flex; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal {
+      background: var(--bg-color);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--neo-shadow-lg);
+      width: 90%;
+      max-width: 480px;
+      padding: 2rem;
+      position: relative;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .modal-close:hover { color: var(--danger); }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+    }
+    .modal-subtitle {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .modal-amount {
+      text-align: center;
+      padding: 1rem;
+      background: var(--bg-color);
+      box-shadow: var(--neo-inset-sm);
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+    }
+    .modal-amount .label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+    .modal-amount .value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent-color);
+    }
+
+    /* ── Payment Methods ── */
+    .pay-methods { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .pay-method {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-md);
+      background: var(--bg-color);
+      box-shadow: var(--neo-shadow-sm);
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: var(--transition);
+    }
+    .pay-method:hover { box-shadow: var(--neo-shadow); }
+    .pay-method.selected {
+      border-color: var(--accent-color);
+      box-shadow: var(--neo-inset-sm);
+    }
+    .pay-method-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+    .pay-method-icon.gpay {
+      background: linear-gradient(135deg, #4285F4, #34A853, #FBBC05, #EA4335);
+      color: #fff;
+    }
+    .pay-method-icon.card {
+      background: linear-gradient(135deg, #1a1c23, #374151);
+      color: #fff;
+    }
+    .pay-method-icon.upi {
+      background: linear-gradient(135deg, #5F259F, #E8520E);
+      color: #fff;
+    }
+    .pay-method-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .pay-method-desc {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .pay-method-radio {
+      margin-left: auto;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--shadow-dark-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .pay-method.selected .pay-method-radio {
+      border-color: var(--accent-color);
+    }
+    .pay-method.selected .pay-method-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-color);
+    }
+
+    /* ── Card Form ── */
+    .card-form { display: none; margin-bottom: 1.5rem; }
+    .card-form.active { display: block; }
+    .card-form .input-group { margin-bottom: 1rem; }
+    .card-form .input-label { font-size: 0.8rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .card-form .input-field { padding: 0.75rem 1rem; font-size: 0.9rem; }
+    .card-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* ── Confirm Button ── */
+    .btn-confirm-pay {
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      border-radius: var(--radius-full);
+      background: var(--accent-color);
+      color: var(--btn-text-color);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      transition: var(--transition);
+    }
+    .btn-confirm-pay:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    .btn-confirm-pay:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── Success State ── */
+    .payment-success {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .payment-success.active { display: block; }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--success);
+      color: #fff;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      animation: pop 0.4s ease;
+    }
+    @keyframes pop {
+      0% { transform: scale(0); }
+      70% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    .payment-success h3 { margin-bottom: 0.5rem; }
+    .payment-success p { color: var(--text-muted); font-size: 0.9rem; }
+
+    /* ── Toast Notification ── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--bg-color);
+      box-shadow: var(--neo-shadow-lg);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .toast-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .toast-icon.success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .toast-text { font-size: 0.85rem; font-weight: 600; }
+
+    @media (max-width: 1024px) {
+      .dashboard-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .invoice-card { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    }
   </style>
 </head>
 <body>
@@ -27,62 +337,73 @@
         <dashboard-sidebar active="invoices"></dashboard-sidebar>
         <div class="dash-content">
           <h2 class="serif mb-6">Invoices & Payments</h2>
-          
+
+          <!-- Summary Cards -->
           <div class="grid grid-cols-3 gap-6 mb-8">
             <div class="card card-inset text-center py-6">
               <p class="text-muted text-sm mb-1">Total Invoice</p>
-              <h3 class="text-accent">?50,000</h3>
+              <h3 class="text-accent stat-value">₹50,000</h3>
             </div>
             <div class="card card-inset text-center py-6">
               <p class="text-muted text-sm mb-1">Paid</p>
-              <h3 class="text-success">?38,000</h3>
+              <h3 class="text-success stat-value" id="totalPaid">₹38,000</h3>
             </div>
             <div class="card card-inset text-center py-6">
               <p class="text-muted text-sm mb-1">Outstanding</p>
-              <h3 class="text-danger">?12,000</h3>
+              <h3 class="text-danger stat-value" id="totalOutstanding">₹12,000</h3>
             </div>
           </div>
 
-          <div class="card">
-            <div class="invoice-card">
+          <!-- Invoice List -->
+          <div class="card" id="invoiceList">
+            <!-- Invoice 1 — Paid -->
+            <div class="invoice-card" data-invoice="Inv-2026-001" data-name="Advance Booking Payment" data-amount="15000" data-date="10 Aug 2026" data-status="paid">
               <div>
                 <h4 class="mb-1">Advance Booking Payment</h4>
                 <p class="text-muted text-sm">Inv-2026-001 • 10 Aug 2026</p>
               </div>
-              <div class="text-right d-flex gap-4 align-center">
-                <div>
-                  <h4 class="mb-1">?15,000</h4>
+              <div class="invoice-actions">
+                <div class="text-right">
+                  <h4 class="mb-1">₹15,000</h4>
                   <span class="badge success">Paid</span>
                 </div>
-                <button class="btn btn-primary" style="padding: 0.5rem 1rem;"><i class="bi bi-download"></i></button>
+                <button class="btn-download" title="Download Invoice" onclick="downloadInvoice('Inv-2026-001', 'Advance Booking Payment', 15000, '10 Aug 2026', 'Paid')">
+                  <i class="bi bi-download"></i>
+                </button>
               </div>
             </div>
-            
-            <div class="invoice-card">
+
+            <!-- Invoice 2 — Paid -->
+            <div class="invoice-card" data-invoice="Inv-2026-002" data-name="Mid-way Planning Payment" data-amount="23000" data-date="20 Aug 2026" data-status="paid">
               <div>
                 <h4 class="mb-1">Mid-way Planning Payment</h4>
                 <p class="text-muted text-sm">Inv-2026-002 • 20 Aug 2026</p>
               </div>
-              <div class="text-right d-flex gap-4 align-center">
-                <div>
-                  <h4 class="mb-1">?23,000</h4>
+              <div class="invoice-actions">
+                <div class="text-right">
+                  <h4 class="mb-1">₹23,000</h4>
                   <span class="badge success">Paid</span>
                 </div>
-                <button class="btn btn-primary" style="padding: 0.5rem 1rem;"><i class="bi bi-download"></i></button>
+                <button class="btn-download" title="Download Invoice" onclick="downloadInvoice('Inv-2026-002', 'Mid-way Planning Payment', 23000, '20 Aug 2026', 'Paid')">
+                  <i class="bi bi-download"></i>
+                </button>
               </div>
             </div>
 
-            <div class="invoice-card">
+            <!-- Invoice 3 — Pending -->
+            <div class="invoice-card" id="pendingInvoice" data-invoice="Inv-2026-003" data-name="Final Settlement" data-amount="12000" data-date="Due 14 Sep 2026" data-status="pending">
               <div>
                 <h4 class="mb-1">Final Settlement</h4>
                 <p class="text-muted text-sm">Inv-2026-003 • Due 14 Sep 2026</p>
               </div>
-              <div class="text-right d-flex gap-4 align-center">
-                <div>
-                  <h4 class="mb-1 text-danger">?12,000</h4>
-                  <span class="badge warning">Pending</span>
+              <div class="invoice-actions" id="pendingActions">
+                <div class="text-right">
+                  <h4 class="mb-1 text-danger">₹12,000</h4>
+                  <span class="badge warning" id="pendingBadge">Pending</span>
                 </div>
-                <button class="btn btn-accent" style="padding: 0.5rem 1rem;">Pay Now</button>
+                <button class="btn-pay" id="payNowBtn" onclick="openPayModal()">
+                  <i class="bi bi-credit-card-2-front"></i> Pay Now
+                </button>
               </div>
             </div>
           </div>
@@ -90,8 +411,292 @@
       </div>
     </div>
   </main>
+
+  <!-- ── Payment Modal ── -->
+  <div class="modal-overlay" id="payModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closePayModal()"><i class="bi bi-x-lg"></i></button>
+
+      <!-- Payment Form -->
+      <div id="paymentForm">
+        <h3 class="modal-title">Complete Payment</h3>
+        <p class="modal-subtitle">Final Settlement — Inv-2026-003</p>
+
+        <div class="modal-amount">
+          <div class="label">Amount Due</div>
+          <div class="value">₹12,000</div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="pay-methods" id="payMethods">
+          <div class="pay-method selected" data-method="gpay" onclick="selectMethod(this)">
+            <div class="pay-method-icon gpay"><i class="bi bi-google"></i></div>
+            <div>
+              <div class="pay-method-name">Google Pay</div>
+              <div class="pay-method-desc">Pay securely via UPI</div>
+            </div>
+            <div class="pay-method-radio"></div>
+          </div>
+
+          <div class="pay-method" data-method="card" onclick="selectMethod(this)">
+            <div class="pay-method-icon card"><i class="bi bi-credit-card-2-front-fill"></i></div>
+            <div>
+              <div class="pay-method-name">Credit / Debit Card</div>
+              <div class="pay-method-desc">Visa, Mastercard, RuPay</div>
+            </div>
+            <div class="pay-method-radio"></div>
+          </div>
+
+          <div class="pay-method" data-method="upi" onclick="selectMethod(this)">
+            <div class="pay-method-icon upi"><i class="bi bi-phone"></i></div>
+            <div>
+              <div class="pay-method-name">UPI ID</div>
+              <div class="pay-method-desc">Enter your UPI address</div>
+            </div>
+            <div class="pay-method-radio"></div>
+          </div>
+        </div>
+
+        <!-- Card Details Form (shown when card is selected) -->
+        <div class="card-form" id="cardForm">
+          <div class="input-group">
+            <label class="input-label">Card Number</label>
+            <input type="text" class="input-field" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCardNumber(this)">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Cardholder Name</label>
+            <input type="text" class="input-field" id="cardName" placeholder="Name on card">
+          </div>
+          <div class="card-form-row">
+            <div class="input-group">
+              <label class="input-label">Expiry</label>
+              <input type="text" class="input-field" id="cardExpiry" placeholder="MM/YY" maxlength="5" oninput="formatExpiry(this)">
+            </div>
+            <div class="input-group">
+              <label class="input-label">CVV</label>
+              <input type="password" class="input-field" id="cardCvv" placeholder="•••" maxlength="4">
+            </div>
+          </div>
+        </div>
+
+        <!-- UPI ID Form -->
+        <div class="card-form" id="upiForm">
+          <div class="input-group">
+            <label class="input-label">UPI ID</label>
+            <input type="text" class="input-field" id="upiId" placeholder="yourname@okicici">
+          </div>
+        </div>
+
+        <button class="btn-confirm-pay" id="confirmPayBtn" onclick="processPayment()">
+          <i class="bi bi-shield-lock"></i> Pay ₹12,000 Securely
+        </button>
+      </div>
+
+      <!-- Success State -->
+      <div class="payment-success" id="paymentSuccess">
+        <div class="success-icon"><i class="bi bi-check-lg"></i></div>
+        <h3>Payment Successful!</h3>
+        <p>₹12,000 has been paid for Final Settlement.</p>
+        <p class="text-muted mt-2" style="font-size: 0.8rem;">Transaction ID: TXN-2026-<span id="txnId"></span></p>
+        <button class="btn btn-accent mt-6" onclick="closePayModal()" style="margin-top: 1.5rem;">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <div class="toast-icon success"><i class="bi bi-check-circle-fill"></i></div>
+    <span class="toast-text" id="toastText">Invoice downloaded!</span>
+  </div>
+
   <app-footer></app-footer>
+
+  <script>
+    // ── Payment Modal ──
+    function openPayModal() {
+      document.getElementById('payModal').classList.add('active');
+      document.getElementById('paymentForm').style.display = 'block';
+      document.getElementById('paymentSuccess').classList.remove('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePayModal() {
+      document.getElementById('payModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Close on overlay click
+    document.getElementById('payModal').addEventListener('click', function(e) {
+      if (e.target === this) closePayModal();
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closePayModal();
+    });
+
+    // ── Select Payment Method ──
+    let selectedMethod = 'gpay';
+
+    function selectMethod(el) {
+      document.querySelectorAll('.pay-method').forEach(m => m.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedMethod = el.dataset.method;
+
+      // Toggle card/UPI form
+      document.getElementById('cardForm').classList.toggle('active', selectedMethod === 'card');
+      document.getElementById('upiForm').classList.toggle('active', selectedMethod === 'upi');
+
+      // Update button text
+      const btnText = selectedMethod === 'gpay' ? 'Pay ₹12,000 via Google Pay' :
+                      selectedMethod === 'card' ? 'Pay ₹12,000 with Card' :
+                      'Pay ₹12,000 via UPI';
+      document.getElementById('confirmPayBtn').innerHTML = `<i class="bi bi-shield-lock"></i> ${btnText}`;
+    }
+
+    // ── Card Number Formatting ──
+    function formatCardNumber(input) {
+      let v = input.value.replace(/\D/g, '').substring(0, 16);
+      input.value = v.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    // ── Expiry Formatting ──
+    function formatExpiry(input) {
+      let v = input.value.replace(/\D/g, '').substring(0, 4);
+      if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2);
+      input.value = v;
+    }
+
+    // ── Process Payment ──
+    function processPayment() {
+      const btn = document.getElementById('confirmPayBtn');
+
+      // Basic validation for card method
+      if (selectedMethod === 'card') {
+        const num = document.getElementById('cardNumber').value.replace(/\s/g, '');
+        const name = document.getElementById('cardName').value.trim();
+        const exp = document.getElementById('cardExpiry').value.trim();
+        const cvv = document.getElementById('cardCvv').value.trim();
+        if (num.length < 16 || !name || exp.length < 5 || cvv.length < 3) {
+          showToast('Please fill in all card details', 'warning');
+          return;
+        }
+      }
+
+      if (selectedMethod === 'upi') {
+        const upi = document.getElementById('upiId').value.trim();
+        if (!upi || !upi.includes('@')) {
+          showToast('Please enter a valid UPI ID', 'warning');
+          return;
+        }
+      }
+
+      // Simulate processing
+      btn.disabled = true;
+      btn.innerHTML = '<i class="bi bi-arrow-repeat"></i> Processing...';
+
+      setTimeout(() => {
+        // Generate transaction ID
+        document.getElementById('txnId').textContent = Math.random().toString(36).substring(2, 10).toUpperCase();
+
+        // Show success
+        document.getElementById('paymentForm').style.display = 'none';
+        document.getElementById('paymentSuccess').classList.add('active');
+
+        // Update the pending invoice row to "Paid"
+        updateInvoiceToPaid();
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-shield-lock"></i> Pay ₹12,000 Securely';
+      }, 2000);
+    }
+
+    // ── Update Invoice to Paid ──
+    function updateInvoiceToPaid() {
+      const pendingRow = document.getElementById('pendingInvoice');
+      const actionsDiv = document.getElementById('pendingActions');
+
+      actionsDiv.innerHTML = `
+        <div class="text-right">
+          <h4 class="mb-1">₹12,000</h4>
+          <span class="badge success">Paid</span>
+        </div>
+        <button class="btn-download" title="Download Invoice" onclick="downloadInvoice('Inv-2026-003', 'Final Settlement', 12000, '${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}', 'Paid')">
+          <i class="bi bi-download"></i>
+        </button>
+      `;
+
+      // Update summary totals
+      document.getElementById('totalPaid').textContent = '₹50,000';
+      document.getElementById('totalOutstanding').textContent = '₹0';
+      document.getElementById('totalOutstanding').classList.remove('text-danger');
+      document.getElementById('totalOutstanding').classList.add('text-success');
+    }
+
+    // ── Download Invoice (generates PDF-like text file) ──
+    function downloadInvoice(invoiceId, name, amount, date, status) {
+      const eventName = localStorage.getItem('aura_registered_name') ? 
+        localStorage.getItem('aura_registered_name').split(' ')[0] + "'s Event" : "Client's Event";
+
+      const invoiceContent = [
+        '═══════════════════════════════════════════════════════',
+        '                     AURA PARTY SUPPLIES',
+        '                       TAX INVOICE',
+        '═══════════════════════════════════════════════════════',
+        '',
+        `  Invoice No    :  ${invoiceId}`,
+        `  Date          :  ${date}`,
+        `  Event         :  ${eventName}`,
+        `  Status        :  ${status}`,
+        '',
+        '───────────────────────────────────────────────────────',
+        '  DESCRIPTION                              AMOUNT (₹)',
+        '───────────────────────────────────────────────────────',
+        '',
+        `  ${name.padEnd(40)} ${amount.toLocaleString('en-IN').padStart(10)}`,
+        '',
+        '───────────────────────────────────────────────────────',
+        `  Subtotal                                 ${amount.toLocaleString('en-IN').padStart(10)}`,
+        `  GST (18%)                                ${Math.round(amount * 0.18).toLocaleString('en-IN').padStart(10)}`,
+        '───────────────────────────────────────────────────────',
+        `  TOTAL                              ₹ ${(amount + Math.round(amount * 0.18)).toLocaleString('en-IN').padStart(10)}`,
+        '═══════════════════════════════════════════════════════',
+        '',
+        '  Payment Method : Online Payment',
+        `  Payment Status : ${status}`,
+        '',
+        '  Thank you for choosing Aura Party Supplies!',
+        '  For queries: support@aura.co.in | +91 98765 43210',
+        '',
+        '═══════════════════════════════════════════════════════',
+      ].join('\n');
+
+      const blob = new Blob([invoiceContent], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${invoiceId}_${name.replace(/\s+/g, '_')}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      showToast(`Invoice ${invoiceId} downloaded!`);
+    }
+
+    // ── Toast Notification ──
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const icon = toast.querySelector('.toast-icon');
+      const text = document.getElementById('toastText');
+
+      text.textContent = message;
+      icon.className = 'toast-icon ' + type;
+      icon.innerHTML = type === 'success' ? '<i class="bi bi-check-circle-fill"></i>' : '<i class="bi bi-exclamation-triangle-fill"></i>';
+
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+  </script>
 </body>
 </html>
-
-
