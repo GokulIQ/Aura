@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Details — Aura</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="components/AppHeader.js" defer></script>
+  <script src="components/AppFooter.js" defer></script>
+  <script src="components/ThemeCard.js" defer></script>
+  <script src="js/themesData.js"></script>
+  <style>
+    /* Gallery Styles */
+    .theme-gallery { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 4rem; }
+    .theme-gallery-main { border-radius: var(--radius-lg); overflow: hidden; height: 500px; box-shadow: var(--neo-shadow); position: relative; }
+    .theme-gallery-main img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; cursor: zoom-in; }
+    .theme-gallery-main:hover img { transform: scale(1.02); }
+    
+    .theme-gallery-side { display: flex; flex-direction: column; gap: 1.5rem; height: 500px; }
+    .theme-gallery-side-img { border-radius: var(--radius-md); overflow: hidden; height: calc(50% - 0.75rem); box-shadow: var(--neo-shadow-sm); position: relative; }
+    .theme-gallery-side-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; cursor: zoom-in; }
+    .theme-gallery-side-img:hover img { transform: scale(1.05); }
+
+    /* Info Grid */
+    .theme-info-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem; }
+    
+    /* Highlights */
+    .highlights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; margin-bottom: 2rem; }
+    .highlight-card { padding: 1.5rem; border-radius: var(--radius-md); background: var(--bg-color); box-shadow: var(--neo-shadow-sm); display: flex; flex-direction: column; gap: 0.5rem; }
+    .highlight-card .icon { font-size: 1.5rem; color: var(--accent-color); }
+    .highlight-card h4 { margin: 0; font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .highlight-card p { margin: 0; font-weight: 600; color: var(--text-dark); }
+
+    /* Lists */
+    .checklist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .checklist-item { display: flex; align-items: flex-start; gap: 0.75rem; }
+    .checklist-item i { color: var(--accent-color); font-size: 1.25rem; }
+
+    /* Sticky Pricing Card */
+    .pricing-card-wrapper { position: sticky; top: 120px; }
+    .pricing-card { padding: 2rem; border-radius: var(--radius-lg); border: 1px solid rgba(var(--accent-rgb, 128, 0, 32), 0.1); }
+
+    /* Badges */
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .badge-outline { padding: 0.5rem 1rem; border: 1px solid var(--accent-color); color: var(--accent-color); border-radius: var(--radius-full); font-size: 0.875rem; font-weight: 500; }
+
+    /* Error State */
+    .error-state { text-align: center; padding: 10rem 0; }
+
+    @media (max-width: 1024px) {
+      .theme-gallery { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+      .theme-gallery-main { height: 350px; }
+      .theme-gallery-side { flex-direction: row; height: 150px; gap: 1rem; }
+      .theme-gallery-side-img { height: 100%; flex: 1; }
+      .theme-info-grid { grid-template-columns: 1fr; gap: 2rem; }
+      .pricing-card-wrapper { position: relative; top: 0; }
+    }
+    @media (max-width: 600px) {
+      .theme-gallery-main { height: 250px; }
+      .theme-gallery-side { height: 100px; }
+      .highlights-grid { grid-template-columns: 1fr; }
+      .checklist-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <app-header></app-header>
+  
+  <main class="section" id="theme-content">
+    <!-- Dynamic content will be injected here -->
+  </main>
+
+  <app-footer></app-footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const themeId = urlParams.get('id');
+      const container = document.getElementById('theme-content');
+
+      if (!themeId || !themes) {
+        showError();
+        return;
+      }
+
+      const theme = themes.find(t => t.id === themeId);
+      if (!theme) {
+        showError();
+        return;
+      }
+
+      renderThemeDetails(theme);
+    });
+
+    function showError() {
+      document.getElementById('theme-content').innerHTML = `
+        <div class="container error-state">
+          <h1 class="serif mb-4">Theme Not Found</h1>
+          <p class="text-muted mb-8">The theme you're looking for is unavailable or the link is incorrect.</p>
+          <a href="themes.html" class="btn btn-primary">Back to Themes Gallery</a>
+        </div>
+      `;
+    }
+
+    function formatPrice(price) {
+      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumSignificantDigits: 3 }).format(price);
+    }
+
+    function renderThemeDetails(theme) {
+      // Find related themes
+      const related = themes
+        .filter(t => t.id !== theme.id && theme.relatedThemes.includes(t.id))
+        .slice(0, 3); // Max 3 related themes
+
+      const container = document.getElementById('theme-content');
+      
+      container.innerHTML = `
+        <div class="container">
+          <div class="mb-6"><a href="themes.html" class="text-muted"><i class="bi bi-arrow-left"></i> Back to Gallery</a></div>
+          
+          <!-- Gallery -->
+          <div class="theme-gallery">
+            <div class="theme-gallery-main">
+              <img src="${theme.heroImage}" alt="${theme.name}">
+            </div>
+            <div class="theme-gallery-side">
+              ${theme.gallery.slice(0, 2).map(img => `
+                <div class="theme-gallery-side-img">
+                  <img src="${img}" alt="${theme.name} details">
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="theme-info-grid">
+            <!-- Left Column: Details -->
+            <div>
+              <div class="d-flex align-center gap-4 mb-4">
+                <span class="badge info">${theme.category}</span>
+                <span class="badge warning"><i class="bi bi-star-fill"></i> ${theme.rating} (${theme.reviews} reviews)</span>
+              </div>
+              
+              <h1 class="serif mb-4">${theme.name}</h1>
+              <p class="text-muted mb-8" style="font-size: 1.125rem; line-height: 1.8;">${theme.description}</p>
+              
+              <!-- Highlights -->
+              <h3 class="serif mb-4">Theme Highlights</h3>
+              <div class="highlights-grid">
+                <div class="highlight-card">
+                  <i class="bi bi-palette icon"></i>
+                  <h4>Style</h4>
+                  <p>${theme.highlights.style}</p>
+                </div>
+                <div class="highlight-card">
+                  <i class="bi bi-balloon icon"></i>
+                  <h4>Best For</h4>
+                  <p>${theme.highlights.bestFor}</p>
+                </div>
+                <div class="highlight-card">
+                  <i class="bi bi-stars icon"></i>
+                  <h4>Mood</h4>
+                  <p>${theme.highlights.mood}</p>
+                </div>
+                <div class="highlight-card">
+                  <i class="bi bi-people icon"></i>
+                  <h4>Capacity</h4>
+                  <p>${theme.highlights.capacity}</p>
+                </div>
+              </div>
+
+              <!-- Included -->
+              <div class="mt-8 mb-8">
+                <h3 class="serif mb-4">What's Included</h3>
+                <div class="checklist-grid">
+                  ${theme.included.map(item => `
+                    <div class="checklist-item">
+                      <i class="bi bi-check-circle-fill"></i>
+                      <span class="text-muted">${item}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Perfect For -->
+              <div class="mt-8 mb-8">
+                <h3 class="serif mb-4">Perfect For</h3>
+                <div class="badge-group">
+                  ${theme.perfectFor.map(item => `
+                    <span class="badge-outline">${item}</span>
+                  `).join('')}
+                </div>
+              </div>
+              
+              <!-- Why Choose -->
+              <div class="mt-8 mb-8">
+                <h3 class="serif mb-4">Why Choose ${theme.name}?</h3>
+                <p class="text-muted" style="line-height: 1.8;">
+                  Every celebration is unique, and ${theme.name} is designed to leave a lasting impression. With its carefully curated elements focusing on a ${theme.highlights.mood.toLowerCase()} atmosphere, it provides the perfect backdrop for ${theme.highlights.bestFor.toLowerCase()}. Our team ensures seamless end-to-end execution so you can focus entirely on enjoying your special moments.
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Column: Pricing -->
+            <div class="pricing-card-wrapper">
+              <div class="card card-inset text-center pricing-card">
+                <h3 class="mb-2">Starting at</h3>
+                <h2 class="text-accent mb-4" style="font-size: 2.5rem;">${formatPrice(theme.price)}</h2>
+                <div class="text-left mb-6">
+                  <p class="text-sm text-muted mb-2"><i class="bi bi-info-circle me-1"></i> Estimated price note</p>
+                  <p class="text-sm text-muted mb-2"><i class="bi bi-house me-1"></i> Subject to venue size</p>
+                  <p class="text-sm text-muted mb-0"><i class="bi bi-people me-1"></i> Scalable for guest count</p>
+                </div>
+                <a href="dashboard.html" class="btn btn-accent w-full mb-4" id="select-theme-btn">Select This Theme</a>
+                <button class="btn btn-primary w-full"><i class="bi bi-heart"></i> Save to Favorites</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Related Themes -->
+          ${related.length > 0 ? `
+            <div class="mt-12 pt-8" style="border-top: 1px solid var(--shadow-dark-color);">
+              <h2 class="serif section-title mb-8">Explore Related Themes</h2>
+              <div class="grid grid-cols-3 gap-8" id="related-themes-container">
+                ${related.map(r => `
+                  <theme-card 
+                    link="theme-details.html?id=${r.id}" 
+                    title="${r.name}" 
+                    category="${r.category}" 
+                    img="${r.heroImage}" 
+                    price="from ${formatPrice(r.price)}">
+                  </theme-card>
+                `).join('')}
+              </div>
+            </div>
+          ` : ''}
+        </div>
+      `;
+
+      // Trigger AppHeader's global link update for "Plan My Event" behavior if applicable
+      // We manually intercept the "Select This Theme" button just like AppHeader did
+      const isAuth = localStorage.getItem("festivo_auth") === "true";
+      const selectBtn = document.getElementById("select-theme-btn");
+      if(selectBtn) {
+        selectBtn.href = isAuth ? "services.html" : "login.html?redirect=services.html";
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Our Services — Aura</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="components/AppHeader.js" defer></script>
+  <script src="components/AppFooter.js" defer></script>
+  <style>
+    .service-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+    .service-row:nth-child(even) .service-content { order: -1; }
+    .service-img-wrapper { border-radius: var(--radius-lg); padding: 1rem; background: var(--bg-color); box-shadow: var(--neo-shadow); }
+    .service-img { border-radius: var(--radius-md); overflow: hidden; height: 400px; }
+    .service-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .service-features { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; margin-bottom: 2rem; }
+    .service-features li { display: flex; align-items: center; gap: 0.75rem; color: var(--text-dark); }
+    .service-features i { color: var(--accent-color); font-size: 1.25rem; }
+    @media (max-width: 1024px) {
+      .service-row { grid-template-columns: 1fr; gap: 2rem; }
+      .service-row:nth-child(even) .service-content { order: 0; }
+      .service-img { height: 300px; }
+    }
+  </style>
+</head>
+<body>
+  <app-header></app-header>
+  <main>
+    <section class="section text-center pb-0">
+      <div class="container">
+        <h1 class="serif section-title mb-4">Our Premium Services</h1>
+        <p class="section-subtitle">We bring your vision to life with meticulous planning and flawless execution.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        
+        <div class="service-row">
+          <div class="service-img-wrapper">
+            <div class="service-img"><img src="assets/Birthdays.jpg" alt="Birthday Planning"></div>
+          </div>
+          <div class="service-content">
+            <h2 class="serif mb-4">Birthday Planning</h2>
+            <p class="text-muted">From magical kids' parties to sophisticated milestone celebrations, we handle every detail so you can enjoy the moment.</p>
+            <ul class="service-features">
+              <li><i class="bi bi-check-circle-fill"></i> Kids, Adult, and Milestone Birthdays</li>
+              <li><i class="bi bi-check-circle-fill"></i> Themed Decorations & Entertainment</li>
+              <li><i class="bi bi-check-circle-fill"></i> Surprise Party Coordination</li>
+            </ul>
+            <a href="themes.html" class="btn btn-primary">Explore Birthday Themes</a>
+          </div>
+        </div>
+
+        <div class="service-row">
+          <div class="service-img-wrapper">
+            <div class="service-img"><img src="assets/Anniversaries.jpg" alt="Anniversary Planning"></div>
+          </div>
+          <div class="service-content">
+            <h2 class="serif mb-4">Anniversary Celebrations</h2>
+            <p class="text-muted">Celebrate your love story with elegant setups, romantic dinners, and unforgettable experiences curated just for you.</p>
+            <ul class="service-features">
+              <li><i class="bi bi-check-circle-fill"></i> Romantic Private Dinners</li>
+              <li><i class="bi bi-check-circle-fill"></i> Silver & Golden Jubilees</li>
+              <li><i class="bi bi-check-circle-fill"></i> Couple Experiences & Travel</li>
+            </ul>
+            <a href="themes.html" class="btn btn-primary">Explore Anniversary Themes</a>
+          </div>
+        </div>
+
+        <div class="service-row">
+          <div class="service-img-wrapper">
+            <div class="service-img"><img src="assets/Baby Showers.jpg" alt="Baby Shower"></div>
+          </div>
+          <div class="service-content">
+            <h2 class="serif mb-4">Baby Showers</h2>
+            <p class="text-muted">Welcome the newest addition to your family with beautifully styled themes, fun games, and seamless catering.</p>
+            <ul class="service-features">
+              <li><i class="bi bi-check-circle-fill"></i> Traditional & Modern Themes</li>
+              <li><i class="bi bi-check-circle-fill"></i> Gender-Neutral Decor</li>
+              <li><i class="bi bi-check-circle-fill"></i> Customized Favors & Games</li>
+            </ul>
+            <a href="themes.html" class="btn btn-primary">Explore Baby Shower Themes</a>
+          </div>
+        </div>
+
+        <div class="service-row">
+          <div class="service-img-wrapper">
+            <div class="service-img"><img src="assets/Corporate Event Decoration Trends 2024.jpg" alt="Corporate Events"></div>
+          </div>
+          <div class="service-content">
+            <h2 class="serif mb-4">Corporate Events</h2>
+            <p class="text-muted">Professional, impactful, and memorable corporate events that impress clients and engage employees.</p>
+            <ul class="service-features">
+              <li><i class="bi bi-check-circle-fill"></i> Annual Celebrations & Galas</li>
+              <li><i class="bi bi-check-circle-fill"></i> Product Launches</li>
+              <li><i class="bi bi-check-circle-fill"></i> Team Building & Offsites</li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary">Request a Proposal</a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+  <app-footer></app-footer>
+</body>
+</html>
+
+
+

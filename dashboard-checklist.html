@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Checklist — Aura</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="components/AppHeader.js" defer></script>
+  <script src="components/AppFooter.js" defer></script>
+  <script src="components/DashboardSidebar.js" defer></script>
+  <style>
+    .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
+    .checklist-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--shadow-dark-color); }
+    .checklist-item:last-child { border-bottom: none; }
+    .check-box { width: 24px; height: 24px; border-radius: 6px; background: var(--bg-color); box-shadow: var(--neo-inset-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; color: transparent; transition: var(--transition); }
+    .check-box.checked { background: var(--accent-color); color: var(--white); box-shadow: none; }
+    .checklist-item.checked h4 { text-decoration: line-through; color: var(--text-muted); }
+    @media (max-width: 1024px) { .dashboard-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <app-header></app-header>
+  <main class="section" style="padding-top: 3rem;">
+    <div class="container">
+      <div class="dashboard-layout">
+        <dashboard-sidebar active="checklist"></dashboard-sidebar>
+        <div class="dash-content">
+          <div class="d-flex justify-between align-center mb-6">
+            <h2 class="serif">Item Checklist</h2>
+            <p class="font-semibold text-accent">18 / 25 Completed</p>
+          </div>
+          <div class="card">
+            <h3 class="serif mb-4">Decoration</h3>
+            <div class="checklist-item checked">
+              <div class="check-box checked"><i class="bi bi-check"></i></div>
+              <h4>Balloon decoration</h4>
+            </div>
+            <div class="checklist-item checked">
+              <div class="check-box checked"><i class="bi bi-check"></i></div>
+              <h4>Stage setup</h4>
+            </div>
+            
+            <h3 class="serif mt-6 mb-4">Catering</h3>
+            <div class="checklist-item checked">
+              <div class="check-box checked"><i class="bi bi-check"></i></div>
+              <h4>Catering confirmation</h4>
+            </div>
+            <div class="checklist-item">
+              <div class="check-box"><i class="bi bi-check"></i></div>
+              <h4>Menu finalization</h4>
+            </div>
+
+            <h3 class="serif mt-6 mb-4">Other</h3>
+            <div class="checklist-item checked">
+              <div class="check-box checked"><i class="bi bi-check"></i></div>
+              <h4>Photographer confirmation</h4>
+            </div>
+            <div class="checklist-item">
+              <div class="check-box"><i class="bi bi-check"></i></div>
+              <h4>Cake delivery</h4>
+            </div>
+            <div class="checklist-item">
+              <div class="check-box"><i class="bi bi-check"></i></div>
+              <h4>Guest invitations</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    document.querySelectorAll('.check-box').forEach(box => {
+      box.addEventListener('click', function() {
+        this.classList.toggle('checked');
+        this.parentElement.classList.toggle('checked');
+      });
+    });
+  </script>
+  <app-footer></app-footer>
+</body>
+</html>
+
+

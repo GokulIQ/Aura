@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — Aura</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="components/AppHeader.js" defer></script>
+  <script src="components/AppFooter.js" defer></script>
+  <style>
+    /* Hero Section */
+    .about-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; padding: 6rem 0 4rem 0; }
+    .hero-text h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
+    .hero-text p { font-size: 1.125rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 90%; }
+    .hero-image-wrapper { position: relative; }
+    .hero-img { border-radius: var(--radius-lg); box-shadow: var(--neo-shadow-lg); width: 100%; height: 550px; object-fit: cover; }
+    
+    .floating-card { position: absolute; background: var(--bg-color); padding: 1rem 1.5rem; border-radius: var(--radius-md); box-shadow: var(--neo-shadow); display: flex; align-items: center; gap: 1rem; animation: float 6s ease-in-out infinite; z-index: 10; }
+    .fc-1 { top: 10%; left: -10%; animation-delay: 0s; }
+    .fc-2 { bottom: 15%; right: -5%; animation-delay: 2s; }
+    .fc-3 { bottom: -5%; left: 10%; animation-delay: 4s; }
+    .floating-card i { font-size: 1.5rem; color: var(--accent-color); }
+    .floating-card h4 { font-size: 1.125rem; margin: 0; color: var(--text-dark); }
+    .floating-card p { font-size: 0.875rem; color: var(--text-muted); margin: 0; }
+    
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+    /* Story Section */
+    .story-section { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .story-img { border-radius: var(--radius-lg); box-shadow: var(--neo-inset); padding: 1rem; background: var(--bg-color); }
+    .story-img img { border-radius: var(--radius-md); width: 100%; height: 400px; object-fit: cover; }
+    
+    .timeline { margin-top: 2rem; display: flex; flex-direction: column; gap: 1.5rem; border-left: 2px solid rgba(122, 40, 59, 0.2); padding-left: 1.5rem; }
+    .timeline-item { position: relative; }
+    .timeline-item::before { content: ''; position: absolute; left: -1.85rem; top: 0.25rem; width: 12px; height: 12px; border-radius: 50%; background: var(--accent-color); box-shadow: 0 0 0 4px var(--bg-color); }
+
+    /* Services Overview */
+    .service-card { padding: 1.5rem; border-radius: var(--radius-lg); text-align: center; transition: var(--transition); }
+    .service-card:hover { transform: translateY(-5px); box-shadow: var(--neo-shadow-lg); }
+    .service-img-wrap { width: 100px; height: 100px; margin: 0 auto 1.5rem; border-radius: 50%; padding: 0.5rem; background: var(--bg-color); box-shadow: var(--neo-shadow-sm); }
+    .service-img-wrap img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+    /* Why Choose Us */
+    .feature-card { display: flex; flex-direction: column; align-items: flex-start; padding: 2rem; height: 100%; }
+    .feature-icon { width: 50px; height: 50px; border-radius: var(--radius-md); background: var(--bg-color); box-shadow: var(--neo-inset-sm); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--accent-color); margin-bottom: 1.5rem; }
+
+    /* Values Section */
+    .values-section { background: var(--bg-color); border-radius: var(--radius-lg); padding: 4rem; box-shadow: var(--neo-inset); }
+    .value-item { text-align: center; padding: 2rem; border-radius: var(--radius-md); box-shadow: var(--neo-shadow-sm); background: var(--bg-color); transition: var(--transition); }
+    .value-item:hover { box-shadow: var(--neo-inset-sm); }
+    
+    /* Vendors Chips */
+    .vendor-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin: 3rem 0; }
+    .vendor-chip { padding: 1rem 2rem; border-radius: var(--radius-full); background: var(--bg-color); box-shadow: var(--neo-shadow-sm); font-weight: 600; color: var(--text-muted); transition: var(--transition); display: flex; align-items: center; gap: 0.5rem; }
+    .vendor-chip:hover { box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
+
+    /* Stats */
+    .stat-card { text-align: center; padding: 2rem; border-radius: var(--radius-md); background: var(--bg-color); box-shadow: var(--neo-shadow); }
+    .stat-number { font-size: 3rem; font-weight: 800; color: var(--accent-color); margin-bottom: 0.5rem; font-family: var(--font-serif); }
+
+    /* Testimonials */
+    .testimonial-card { padding: 2.5rem; position: relative; }
+    .quote-icon { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 3rem; color: rgba(122, 40, 59, 0.1); }
+    .testi-user { display: flex; align-items: center; gap: 1rem; margin-top: 1.5rem; }
+    .testi-avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--bg-color); box-shadow: var(--neo-inset-sm); display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: var(--accent-color); }
+
+    /* Responsive adjustments */
+    @media (max-width: 1024px) {
+      .about-hero, .story-section { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+      .hero-text h1 { font-size: 2.75rem; }
+      .hero-text p { margin: 0 auto 2.5rem auto; }
+      .hero-image-wrapper { margin-top: 2rem; padding: 0 1rem; }
+      .floating-card { padding: 0.75rem 1rem; }
+      .fc-1 { top: 0; left: 0; }
+      .fc-2 { bottom: 10%; right: 0; }
+      .fc-3 { bottom: 0; left: 10%; }
+      .timeline { text-align: left; margin: 2rem auto 0 auto; max-width: 400px; }
+      .values-section { padding: 2rem; }
+    }
+    @media (max-width: 768px) {
+      .hero-text h1 { font-size: 2.25rem; }
+      .hero-img { height: 350px; }
+      .story-img img { height: 300px; }
+      .floating-card { display: none; }
+      .grid-cols-4, .grid-cols-3, .grid-cols-2 { grid-template-columns: 1fr; }
+    }
+    
+    /* Dark mode adjustments for border color */
+    [data-theme="dark"] .timeline { border-left-color: rgba(252, 165, 165, 0.2); }
+    [data-theme="dark"] .quote-icon { color: rgba(252, 165, 165, 0.1); }
+  </style>
+</head>
+<body>
+  <app-header></app-header>
+  
+  <main>
+    <!-- Section 1: Hero -->
+    <section class="container">
+      <div class="about-hero">
+        <div class="hero-text">
+          <h1 class="serif">We Turn Your Special Moments Into Beautiful Memories.</h1>
+          <p>Aura is your premium partner for end-to-end event planning. From the first idea to the final toast, we handle the details so you can enjoy the celebration.</p>
+          <div class="d-flex gap-4" style="flex-wrap: wrap;">
+            <a href="login.html?redirect=services.html" class="btn btn-accent">Plan My Event</a>
+            <a href="#our-story" class="btn btn-primary">Explore Our Story</a>
+          </div>
+        </div>
+        <div class="hero-image-wrapper">
+          <img src="assets/About.jpg" alt="Aura Event Planning" class="hero-img">
+          <div class="floating-card fc-1">
+            <i class="bi bi-calendar2-check-fill"></i>
+            <div>
+              <h4>500+</h4>
+              <p>Events Planned</p>
+            </div>
+          </div>
+          <div class="floating-card fc-2">
+            <i class="bi bi-star-fill text-warning"></i>
+            <div>
+              <h4>4.9/5</h4>
+              <p>Client Rating</p>
+            </div>
+          </div>
+          <div class="floating-card fc-3">
+            <i class="bi bi-people-fill"></i>
+            <div>
+              <h4>50+</h4>
+              <p>Trusted Vendors</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Our Story -->
+    <section id="our-story" class="section pt-0">
+      <div class="container">
+        <div class="story-section">
+          <div class="story-img">
+            <img src="assets/Corporate.jpg" alt="Our Story">
+          </div>
+          <div>
+            <h2 class="serif section-title text-left mb-6">Our Story</h2>
+            <p class="text-muted mb-4">Founded with a simple vision—to take the stress out of celebrations—Aura has grown into a premier event planning network. We believe that bringing together the best creative themes, professional decorators, photographers, and caterers shouldn't be a hassle.</p>
+            <p class="text-muted">Today, Aura connects you with a curated network of elite event professionals, providing end-to-end execution for your most cherished milestones.</p>
+            
+            <div class="timeline">
+              <div class="timeline-item">
+                <h4 class="text-accent">2019 — The Beginning</h4>
+                <p class="text-sm text-muted">Aura started as a small, passionate team decorating local birthdays.</p>
+              </div>
+              <div class="timeline-item">
+                <h4 class="text-accent">2021 — 100+ Events</h4>
+                <p class="text-sm text-muted">Expanded to full-scale weddings and corporate galas.</p>
+              </div>
+              <div class="timeline-item">
+                <h4 class="text-accent">2023 — Trusted Vendor Network</h4>
+                <p class="text-sm text-muted">Launched our curated marketplace of premium event professionals.</p>
+              </div>
+              <div class="timeline-item">
+                <h4 class="text-accent">2025 — 500+ Celebrations</h4>
+                <p class="text-sm text-muted">Celebrating over 500 beautifully crafted, unforgettable events.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: What We Do -->
+    <section class="section pt-0">
+      <div class="container text-center">
+        <h2 class="serif section-title mb-4">Everything You Need For A Perfect Celebration</h2>
+        <p class="section-subtitle mb-12">Expertly crafted experiences tailored to your specific milestones.</p>
+        
+        <div class="grid grid-cols-4 gap-6">
+          <div class="card service-card">
+            <div class="service-img-wrap"><img src="assets/Birthdays.jpg" alt="Birthdays"></div>
+            <h4 class="mb-2">Birthdays</h4>
+            <p class="text-sm text-muted">Creative themes and memorable setups for all ages.</p>
+          </div>
+          <div class="card service-card">
+            <div class="service-img-wrap"><img src="assets/Weddings.jpg" alt="Weddings"></div>
+            <h4 class="mb-2">Weddings</h4>
+            <p class="text-sm text-muted">Elegant planning, breathtaking decor, and seamless coordination.</p>
+          </div>
+          <div class="card service-card">
+            <div class="service-img-wrap"><img src="assets/Baby Showers.jpg" alt="Baby Showers"></div>
+            <h4 class="mb-2">Baby Showers</h4>
+            <p class="text-sm text-muted">Beautiful, personalized celebrations for life's new beginnings.</p>
+          </div>
+          <div class="card service-card">
+            <div class="service-img-wrap"><img src="assets/Corporate.jpg" alt="Corporate"></div>
+            <h4 class="mb-2">Corporate</h4>
+            <p class="text-sm text-muted">Professional, impressive event planning and execution.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Why Choose Aura -->
+    <section class="section pt-0">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="serif section-title">Why Choose Aura?</h2>
+          <p class="section-subtitle">We don't just plan events; we design experiences.</p>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-6">
+          <div class="card card-inset feature-card">
+            <div class="feature-icon"><i class="bi bi-stars"></i></div>
+            <h4 class="mb-2">Personalized Planning</h4>
+            <p class="text-muted text-sm">Every event is designed around your unique vision and preferences.</p>
+          </div>
+          <div class="card card-inset feature-card">
+            <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+            <h4 class="mb-2">Trusted Vendors</h4>
+            <p class="text-muted text-sm">Connect with carefully selected, top-rated event professionals.</p>
+          </div>
+          <div class="card card-inset feature-card">
+            <div class="feature-icon"><i class="bi bi-palette"></i></div>
+            <h4 class="mb-2">Beautiful Themes</h4>
+            <p class="text-muted text-sm">Choose from a gallery of highly curated celebration concepts.</p>
+          </div>
+          <div class="card card-inset feature-card">
+            <div class="feature-icon"><i class="bi bi-emoji-smile"></i></div>
+            <h4 class="mb-2">Stress-Free Experience</h4>
+            <p class="text-muted text-sm">We simplify the entire process from your first idea to execution.</p>
+          </div>
+          <div class="card card-inset feature-card">
+            <div class="feature-icon"><i class="bi bi-box-seam"></i></div>
+            <h4 class="mb-2">Transparent Packages</h4>
+            <p class="text-muted text-sm">Clear, upfront packages with no hidden surprises.</p>
+          </div>
+          <div class="card card-inset feature-card">
+            <div class="feature-icon"><i class="bi bi-headset"></i></div>
+            <h4 class="mb-2">Dedicated Support</h4>
+            <p class="text-muted text-sm">Constant guidance and support throughout your event journey.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: Our Values -->
+    <section class="section pt-0">
+      <div class="container">
+        <div class="values-section">
+          <div class="text-center mb-12">
+            <h2 class="serif section-title mb-4">What We Believe In</h2>
+            <p class="section-subtitle">The core principles that drive every celebration we touch.</p>
+          </div>
+          <div class="grid grid-cols-4 gap-6">
+            <div class="value-item">
+              <h4 class="text-accent mb-2">Creativity</h4>
+              <p class="text-sm text-muted">We believe every celebration should feel completely unique.</p>
+            </div>
+            <div class="value-item">
+              <h4 class="text-accent mb-2">Quality</h4>
+              <p class="text-sm text-muted">We work tirelessly to deliver beautiful, reliable experiences.</p>
+            </div>
+            <div class="value-item">
+              <h4 class="text-accent mb-2">Trust</h4>
+              <p class="text-sm text-muted">We build long-term relationships with clients and vendors.</p>
+            </div>
+            <div class="value-item">
+              <h4 class="text-accent mb-2">Joy</h4>
+              <p class="text-sm text-muted">At the heart of everything we do is the happiness of our clients.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Vendor Network -->
+    <section class="section pt-0 text-center">
+      <div class="container">
+        <h2 class="serif section-title mb-4">The People Behind Your Perfect Event</h2>
+        <p class="section-subtitle">Aura partners with a curated network of elite event professionals to bring your vision to life.</p>
+        
+        <div class="vendor-chips">
+          <div class="vendor-chip"><i class="bi bi-brush text-accent"></i> Decorators</div>
+          <div class="vendor-chip"><i class="bi bi-camera text-accent"></i> Photographers</div>
+          <div class="vendor-chip"><i class="bi bi-cup-hot text-accent"></i> Caterers</div>
+          <div class="vendor-chip"><i class="bi bi-flower1 text-accent"></i> Florists</div>
+          <div class="vendor-chip"><i class="bi bi-music-note-beamed text-accent"></i> DJs / Music</div>
+          <div class="vendor-chip"><i class="bi bi-magic text-accent"></i> Makeup Artists</div>
+          <div class="vendor-chip"><i class="bi bi-cake text-accent"></i> Bakers</div>
+        </div>
+        
+        <a href="vendors.html" class="btn btn-primary mt-4">Explore Our Vendors <i class="bi bi-arrow-right ms-2"></i></a>
+      </div>
+    </section>
+
+    <!-- Section 7: Numbers -->
+    <section class="section pt-0">
+      <div class="container">
+        <div class="grid grid-cols-4 gap-6">
+          <div class="stat-card">
+            <div class="stat-number">500+</div>
+            <p class="text-muted font-semibold">Events Planned</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">50+</div>
+            <p class="text-muted font-semibold">Trusted Vendors</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number d-flex justify-center align-center">4.9 <i class="bi bi-star-fill text-warning ms-2" style="font-size:1.75rem;"></i></div>
+            <p class="text-muted font-semibold">Average Client Rating</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">98%</div>
+            <p class="text-muted font-semibold">Happy Clients</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: Testimonials -->
+    <section class="section pt-0">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="serif section-title">Loved By People Who Celebrate With Us</h2>
+          <p class="section-subtitle">Don't just take our word for it. Hear from our happy clients.</p>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-8">
+          <div class="card testimonial-card">
+            <i class="bi bi-quote quote-icon"></i>
+            <div class="mb-4 text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="text-muted" style="font-style: italic;">"Aura took completely all the stress away from my daughter's first birthday. The unicorn theme was magical and the execution was flawless!"</p>
+            <div class="testi-user">
+              <div class="testi-avatar">S</div>
+              <div>
+                <h4 class="mb-0 text-dark" style="font-size: 1rem;">Sneha Sharma</h4>
+                <p class="text-sm text-accent mb-0">Birthday Party</p>
+              </div>
+            </div>
+          </div>
+          <div class="card testimonial-card">
+            <i class="bi bi-quote quote-icon"></i>
+            <div class="mb-4 text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="text-muted" style="font-style: italic;">"We hired Aura for our silver jubilee anniversary. The attention to detail and the quality of vendors they provided were absolutely top-notch."</p>
+            <div class="testi-user">
+              <div class="testi-avatar">R</div>
+              <div>
+                <h4 class="mb-0 text-dark" style="font-size: 1rem;">Rahul & Priya</h4>
+                <p class="text-sm text-accent mb-0">25th Anniversary</p>
+              </div>
+            </div>
+          </div>
+          <div class="card testimonial-card">
+            <i class="bi bi-quote quote-icon"></i>
+            <div class="mb-4 text-warning">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p class="text-muted" style="font-style: italic;">"Our corporate gala was a huge success thanks to the Aura team. Professional, transparent, and incredibly creative from start to finish."</p>
+            <div class="testi-user">
+              <div class="testi-avatar">M</div>
+              <div>
+                <h4 class="mb-0 text-dark" style="font-size: 1rem;">Meera Desai</h4>
+                <p class="text-sm text-accent mb-0">Corporate Gala</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 9: Final CTA -->
+    <section class="section pt-0">
+      <div class="container">
+        <div class="card card-inset text-center py-12">
+          <h2 class="serif mb-4" style="font-size: 2.5rem;">Your Celebration Starts With An Idea.</h2>
+          <p class="text-muted mb-8" style="font-size: 1.125rem;">Let Aura turn that idea into an unforgettable experience.</p>
+          <div class="d-flex gap-4 justify-center" style="flex-wrap: wrap;">
+            <a href="login.html?redirect=services.html" class="btn btn-accent btn-lg" style="padding: 1rem 3rem; font-size: 1.125rem;">Plan My Event</a>
+            <a href="themes.html" class="btn btn-primary btn-lg" style="padding: 1rem 3rem; font-size: 1.125rem;">Explore Themes</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  
+  <app-footer></app-footer>
+</body>
+</html>

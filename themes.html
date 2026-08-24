@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Themes Gallery - Aura</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="components/AppHeader.js" defer></script>
+  <script src="components/AppFooter.js" defer></script>
+  <script src="components/ThemeCard.js" defer></script>
+  <style>
+    .filter-bar { padding: 1.5rem; border-radius: var(--radius-lg); margin-bottom: 3rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { padding: 0.5rem 1.25rem; border-radius: var(--radius-full); font-weight: 500; color: var(--text-muted); transition: var(--transition); cursor: pointer; border: none; background: transparent; }
+    .filter-btn:hover { color: var(--accent-color); }
+    .filter-btn.active { background: var(--bg-color); box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
+  </style>
+</head>
+<body>
+  <app-header></app-header>
+  <main>
+    <section class="section pb-0">
+      <div class="container text-center">
+        <h1 class="serif section-title mb-4">Themes Gallery</h1>
+        <p class="section-subtitle mb-8">Discover our curated collection of premium decoration themes.</p>
+        
+        <div class="card card-inset filter-bar" id="theme-filters">
+          <button class="filter-btn active" data-filter="All">All Themes</button>
+          <button class="filter-btn" data-filter="Birthday">Birthday</button>
+          <button class="filter-btn" data-filter="Kids">Kids</button>
+          <button class="filter-btn" data-filter="Anniversary">Anniversary</button>
+          <button class="filter-btn" data-filter="Baby Shower">Baby Shower</button>
+          <button class="filter-btn" data-filter="Wedding">Wedding</button>
+          <button class="filter-btn" data-filter="Corporate">Corporate</button>
+          <button class="filter-btn" data-filter="Festivals">Festivals</button>
+          <button class="filter-btn" data-filter="Floral">Floral</button>
+          <button class="filter-btn" data-filter="Luxury">Luxury</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section pt-0">
+      <div class="container">
+        <div class="grid grid-cols-3 gap-8">
+          <!-- Birthday / Adult -->
+          <theme-card link="theme-details.html?id=bohemian-dream" title="Bohemian Dream" category="Birthday / Adult" img="assets/Boho Celebration.jpg" price="from ₹15,000"></theme-card>
+          
+          <!-- Kids -->
+          <theme-card link="theme-details.html?id=unicorn-magic" title="Unicorn Magic" category="Kids" img="assets/Unicorn Dreams.jpg" price="from ₹12,000"></theme-card>
+          <theme-card link="theme-details.html?id=princess-royale" title="Princess Royale" category="Kids" img="assets/Princess Royale.jpg" price="from ₹12,000"></theme-card>
+          <theme-card link="theme-details.html?id=jungle-safari" title="Jungle Safari" category="Kids" img="assets/Jungle Safari.jpg" price="from ₹13,000"></theme-card>
+          
+          <!-- Anniversary -->
+          <theme-card link="theme-details.html?id=silver-jubilee-elegance" title="Silver Jubilee Elegance" category="Anniversary" img="assets/Silver Jubilee (25th).jpg" price="from ₹25,000"></theme-card>
+          <theme-card link="theme-details.html?id=golden-anniversary" title="Golden Anniversary (50th)" category="Anniversary" img="assets/Golden Anniversary (50th).jpg" price="from ₹28,000"></theme-card>
+          <theme-card link="theme-details.html?id=romantic-evening" title="Romantic Evening" category="Anniversary" img="assets/Romantic Evening.jpg" price="from ₹18,000"></theme-card>
+          
+          <!-- Luxury -->
+          <theme-card link="theme-details.html?id=minimalist-white" title="Minimalist White" category="Luxury" img="assets/Minimal White Wedding.jpg" price="from ₹35,000"></theme-card>
+          <theme-card link="theme-details.html?id=royal-luxury-decor" title="Royal Luxury Decor" category="Luxury" img="assets/Royal Wedding Backdrop Panel2.jpg" price="from ₹80,000"></theme-card>
+          <theme-card link="theme-details.html?id=premium-table-decor" title="Premium Table Decor" category="Luxury" img="assets/Wedding Table Centrepiece Set (10pc) 2.jpg" price="from ₹12,000"></theme-card>
+          
+          <!-- Baby Shower -->
+          <theme-card link="theme-details.html?id=pastel-paradise" title="Pastel Paradise" category="Baby Shower" img="assets/Pastel Birthday.jpg" price="from ₹18,000"></theme-card>
+          <theme-card link="theme-details.html?id=baby-blue-dream" title="Baby Blue Dream" category="Baby Shower" img="assets/Baby Blue Dream.jpg" price="from ₹16,000"></theme-card>
+          <theme-card link="theme-details.html?id=baby-welcome-celebration" title="Baby Welcome Celebration" category="Baby Shower" img="assets/Baby Welcome.jpg" price="from ₹14,500"></theme-card>
+          
+          <!-- Corporate -->
+          <theme-card link="theme-details.html?id=corporate-gala" title="Corporate Gala" category="Corporate" img="assets/Corporate.jpg" price="Custom"></theme-card>
+          <theme-card link="theme-details.html?id=office-party" title="Office Party" category="Corporate" img="assets/Office Party.jpg" price="Custom"></theme-card>
+          <theme-card link="theme-details.html?id=team-celebration" title="Team Celebration" category="Corporate" img="assets/Team Celebration.jpg" price="Custom"></theme-card>
+          
+          <!-- Festivals -->
+          <theme-card link="theme-details.html?id=diwali-glow" title="Diwali Glow" category="Festivals" img="assets/Diwali Glow.jpg" price="from ₹20,000"></theme-card>
+          <theme-card link="theme-details.html?id=christmas-magic" title="Christmas Magic" category="Festivals" img="assets/Christmas Magic.jpg" price="from ₹22,000"></theme-card>
+          <theme-card link="theme-details.html?id=festival-lights" title="Festival Lights" category="Festivals" img="assets/Festival Lights.jpg" price="from ₹15,000"></theme-card>
+          
+          <!-- Wedding -->
+          <theme-card link="theme-details.html?id=rustic-romance" title="Rustic Romance" category="Wedding" img="assets/Rustic Romance.jpg" price="from ₹40,000"></theme-card>
+          <theme-card link="theme-details.html?id=royal-wedding" title="Royal Wedding" category="Wedding" img="assets/Royal Wedding.jpg" price="from ₹55,000"></theme-card>
+          <theme-card link="theme-details.html?id=boho-wedding" title="Boho Wedding" category="Wedding" img="assets/Boho Wedding DIY Kit.jpg" price="from ₹38,000"></theme-card>
+          
+          <!-- Floral -->
+          <theme-card link="theme-details.html?id=pink-blossom" title="Pink Blossom" category="Floral" img="assets/Pink Blossom.jpg" price="from ₹15,000"></theme-card>
+          <theme-card link="theme-details.html?id=bohemian-floral-backdrop" title="Bohemian Floral Backdrop" category="Floral" img="assets/Bohemian Floral Backdrop1.jpg" price="from ₹21,000"></theme-card>
+          <theme-card link="theme-details.html?id=flower-wall-backdrop" title="Flower Wall Backdrop" category="Floral" img="assets/Flower Wall Backdrop.jpg" price="from ₹24,000"></theme-card>
+        </div>
+      </div>
+    </section>
+  </main>
+  <app-footer></app-footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const filterBtns = document.querySelectorAll("#theme-filters .filter-btn");
+      const themeCards = document.querySelectorAll("theme-card");
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          // Remove active class from all buttons
+          filterBtns.forEach(b => b.classList.remove("active"));
+          // Add active class to clicked button
+          btn.classList.add("active");
+
+          const filterValue = btn.getAttribute("data-filter");
+
+          themeCards.forEach(card => {
+            if (filterValue === "All") {
+              card.style.display = "block";
+            } else {
+              const category = card.getAttribute("category") || "";
+              if (category.toLowerCase().includes(filterValue.toLowerCase())) {
+                card.style.display = "block";
+              } else {
+                card.style.display = "none";
+              }
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoices & Payments — Aura</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="components/AppHeader.js" defer></script>
+  <script src="components/AppFooter.js" defer></script>
+  <script src="components/DashboardSidebar.js" defer></script>
+  <style>
+    .dashboard-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start; }
+    .invoice-card { padding: 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--shadow-dark-color); }
+    .invoice-card:last-child { border-bottom: none; }
+    @media (max-width: 1024px) { .dashboard-layout { grid-template-columns: 1fr; } .invoice-card { flex-direction: column; align-items: flex-start; gap: 1rem; } }
+  </style>
+</head>
+<body>
+  <app-header></app-header>
+  <main class="section" style="padding-top: 3rem;">
+    <div class="container">
+      <div class="dashboard-layout">
+        <dashboard-sidebar active="invoices"></dashboard-sidebar>
+        <div class="dash-content">
+          <h2 class="serif mb-6">Invoices & Payments</h2>
+          
+          <div class="grid grid-cols-3 gap-6 mb-8">
+            <div class="card card-inset text-center py-6">
+              <p class="text-muted text-sm mb-1">Total Invoice</p>
+              <h3 class="text-accent">?50,000</h3>
+            </div>
+            <div class="card card-inset text-center py-6">
+              <p class="text-muted text-sm mb-1">Paid</p>
+              <h3 class="text-success">?38,000</h3>
+            </div>
+            <div class="card card-inset text-center py-6">
+              <p class="text-muted text-sm mb-1">Outstanding</p>
+              <h3 class="text-danger">?12,000</h3>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="invoice-card">
+              <div>
+                <h4 class="mb-1">Advance Booking Payment</h4>
+                <p class="text-muted text-sm">Inv-2026-001 • 10 Aug 2026</p>
+              </div>
+              <div class="text-right d-flex gap-4 align-center">
+                <div>
+                  <h4 class="mb-1">?15,000</h4>
+                  <span class="badge success">Paid</span>
+                </div>
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;"><i class="bi bi-download"></i></button>
+              </div>
+            </div>
+            
+            <div class="invoice-card">
+              <div>
+                <h4 class="mb-1">Mid-way Planning Payment</h4>
+                <p class="text-muted text-sm">Inv-2026-002 • 20 Aug 2026</p>
+              </div>
+              <div class="text-right d-flex gap-4 align-center">
+                <div>
+                  <h4 class="mb-1">?23,000</h4>
+                  <span class="badge success">Paid</span>
+                </div>
+                <button class="btn btn-primary" style="padding: 0.5rem 1rem;"><i class="bi bi-download"></i></button>
+              </div>
+            </div>
+
+            <div class="invoice-card">
+              <div>
+                <h4 class="mb-1">Final Settlement</h4>
+                <p class="text-muted text-sm">Inv-2026-003 • Due 14 Sep 2026</p>
+              </div>
+              <div class="text-right d-flex gap-4 align-center">
+                <div>
+                  <h4 class="mb-1 text-danger">?12,000</h4>
+                  <span class="badge warning">Pending</span>
+                </div>
+                <button class="btn btn-accent" style="padding: 0.5rem 1rem;">Pay Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <app-footer></app-footer>
+</body>
+</html>
+
+
