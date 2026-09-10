@@ -18,11 +18,13 @@
     .filter-btn { padding: 0.5rem 1.25rem; border-radius: var(--radius-full); font-weight: 500; color: var(--text-muted); transition: var(--transition); cursor: pointer; border: none; background: transparent; }
     .filter-btn:hover { color: var(--accent-color); }
     .filter-btn.active { background: var(--bg-color); box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
+    .themes-grid-section { padding-bottom: 0; }
+    .themes-page + app-footer .app-footer { margin-top: 2rem; }
   </style>
 </head>
 <body>
   <app-header></app-header>
-  <main>
+  <main class="themes-page">
     <section class="section pb-0">
       <div class="container text-center">
         <h1 class="serif section-title mb-4">Themes Gallery</h1>
@@ -43,7 +45,7 @@
       </div>
     </section>
 
-    <section class="section pt-0">
+    <section class="section pt-0 themes-grid-section">
       <div class="container">
         <div class="grid grid-cols-3 gap-8">
           <!-- Birthday / Adult -->
@@ -88,6 +90,10 @@
           <theme-card link="theme-details.html?id=pink-blossom" title="Pink Blossom" category="Floral" img="assets/Pink Blossom.jpg" price="from ₹15,000"></theme-card>
           <theme-card link="theme-details.html?id=bohemian-floral-backdrop" title="Bohemian Floral Backdrop" category="Floral" img="assets/Bohemian Floral Backdrop1.jpg" price="from ₹21,000"></theme-card>
           <theme-card link="theme-details.html?id=flower-wall-backdrop" title="Flower Wall Backdrop" category="Floral" img="assets/Flower Wall Backdrop.jpg" price="from ₹24,000"></theme-card>
+          
+          <!-- Additional Themes to balance grid -->
+          <theme-card link="theme-details.html?id=superhero-action" title="Superhero Action" category="Kids" img="assets/Superhero.jpg" price="from ₹10,000"></theme-card>
+          <theme-card link="theme-details.html?id=neon-glow-party" title="Neon Glow Party" category="Birthday" img="assets/Neon Sign Happy Birthday.jpg" price="from ₹14,000"></theme-card>
         </div>
       </div>
     </section>

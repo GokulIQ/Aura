@@ -118,6 +118,10 @@
     }
 
     function renderThemeDetails(theme) {
+      const galleryImages = [...new Set(theme.gallery || [])]
+        .filter(image => image && image !== theme.heroImage)
+        .slice(0, 2);
+
       // Find related themes
       const related = themes
         .filter(t => t.id !== theme.id && theme.relatedThemes.includes(t.id))
@@ -135,7 +139,7 @@
               <img src="${theme.heroImage}" alt="${theme.name}">
             </div>
             <div class="theme-gallery-side">
-              ${theme.gallery.slice(0, 2).map(img => `
+              ${galleryImages.map(img => `
                 <div class="theme-gallery-side-img">
                   <img src="${img}" alt="${theme.name} details">
                 </div>

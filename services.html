@@ -13,6 +13,8 @@
   <script src="components/AppFooter.js" defer></script>
   <style>
     .service-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-bottom: 6rem; }
+    .service-row:last-child { margin-bottom: 0; }
+    .services-list { padding-bottom: 0; }
     .service-row:nth-child(even) .service-content { order: -1; }
     .service-img-wrapper { border-radius: var(--radius-lg); padding: 1rem; background: var(--bg-color); box-shadow: var(--neo-shadow); }
     .service-img { border-radius: var(--radius-md); overflow: hidden; height: 400px; }
@@ -37,7 +39,7 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section services-list">
       <div class="container">
         
         <div class="service-row">

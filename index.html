@@ -65,12 +65,22 @@
       font-size: 2rem;
       color: var(--accent-color);
     }
+    .home-page .section { padding: 4rem 0; }
+    .home-page .section-header { margin-bottom: 2.5rem; }
+    .home-page .final-cta { padding-top: 2.5rem; padding-bottom: 3rem; }
+    .home-page + app-footer .app-footer { margin-top: 2rem; }
+    .final-cta-content { padding: 4rem; text-align: left; }
+    @media (max-width: 768px) {
+      .home-page .section { padding: 3rem 0; }
+      .home-page .final-cta { padding-top: 2rem; padding-bottom: 2.5rem; }
+      .final-cta-content { padding: 2.5rem 1.5rem; text-align: center; }
+    }
   </style>
 </head>
 <body>
   <app-header></app-header>
 
-  <main>
+  <main class="home-page">
     <!-- Hero Section -->
     <section class="hero-section">
       <div class="container">
@@ -220,12 +230,19 @@
     </section>
 
     <!-- Final CTA -->
-    <section class="section">
+    <section class="section final-cta">
       <div class="container">
-        <div class="card card-inset text-center py-12">
-          <h2 class="serif mb-4" style="font-size: 2.5rem;">Let's Make Your Next Celebration Unforgettable.</h2>
-          <p class="text-muted mb-8" style="font-size: 1.125rem;">Start your journey with our premium planning portal today.</p>
-          <a href="dashboard.html" class="btn btn-accent btn-lg" style="padding: 1rem 3rem; font-size: 1.125rem;">Start Planning</a>
+        <div class="card card-inset overflow-hidden" style="padding: 0;">
+          <div class="grid grid-cols-2 align-center" style="gap: 0;">
+            <div class="final-cta-content">
+              <h2 class="serif mb-4" style="font-size: 2.5rem;">Let's Make Your Next Celebration Unforgettable.</h2>
+              <p class="text-muted mb-8" style="font-size: 1.125rem;">Start your journey with our premium planning portal today. Discover bespoke themes and top-rated vendors.</p>
+              <a href="dashboard.html" class="btn btn-accent btn-lg" style="padding: 1rem 3rem; font-size: 1.125rem;">Start Planning</a>
+            </div>
+            <div style="height: 100%; min-height: 400px; position: relative;">
+              <img src="assets/corporate.jpg" alt="Premium Event Celebration" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+            </div>
+          </div>
         </div>
       </div>
     </section>

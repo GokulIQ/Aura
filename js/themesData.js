@@ -452,7 +452,7 @@ const themes = [
       "assets/Baby Shower Blue Theme Kit1.jpg",
       "assets/Baby Shower Blue Theme Kit2.jpg",
       "assets/Baby Shower Blue Theme Kit3.jpg",
-      "assets/Baby Shower Kit — Blue.jpg"
+      "assets/Baby Shower Blue Theme Kit4.jpg"
     ],
     description: "A charming blue and white themed setup. Perfect for welcoming a baby boy or hosting a serene, cloud-like celebration.",
     highlights: {
@@ -492,7 +492,7 @@ const themes = [
       "assets/Baby Shower Pink Theme Complete Kit1.jpg",
       "assets/Baby Shower Pink Theme Complete Kit2.jpg",
       "assets/Baby Shower Pink Theme Complete Kit3.jpg",
-      "assets/Baby Shower Kit — Pink.jpg"
+      "assets/Baby Shower Pink Theme Complete Kit4.jpg"
     ],
     description: "A warm and inviting pink-themed setup designed to celebrate the arrival of a new family member with joy and elegance.",
     highlights: {
@@ -727,7 +727,7 @@ const themes = [
     heroImage: "assets/Festival Lights.jpg",
     gallery: [
       "assets/Fairy Light Backdrop 2x2m3.jpg",
-      "assets/Fairy Light Backdrop 2x2m4.jpg",
+      "assets/Fairy Light Backdrop 2x2m 4.jpg",
       "assets/Neon Sign Happy Birthday.jpg"
     ],
     description: "A versatile lighting-focused setup perfect for any nighttime celebration. Transforms spaces with curtains of light, colorful uplighting, and glowing accents.",
@@ -767,7 +767,7 @@ const themes = [
     gallery: [
       "assets/Boho Wedding DIY Kit.jpg",
       "assets/Bohemian Floral Backdrop2.jpg",
-      "assets/Macramé Boho Backdrop.jpg"
+      "assets/Boho Celebration Table Decor Set1.jpg"
     ],
     description: "Earthy tones, natural woods, and lush greenery combined with warm lighting. Ideal for barn weddings, outdoor ceremonies, and nature-lovers.",
     highlights: {
@@ -843,7 +843,7 @@ const themes = [
     reviews: 140,
     heroImage: "assets/Boho Wedding DIY Kit.jpg",
     gallery: [
-      "assets/Macramé Boho Backdrop.jpg",
+      "assets/Boho Celebration Table Decor Set2.jpg",
       "assets/Bohemian Floral Backdrop1.jpg",
       "assets/Neutral Rainbow.jpg"
     ],
@@ -989,6 +989,75 @@ const themes = [
       "pink-blossom",
       "bohemian-floral-backdrop",
       "royal-luxury-decor"
+    ]
+  },
+  {
+    id: "superhero-action",
+    name: "Superhero Action",
+    category: "Kids",
+    price: 10000,
+    rating: 4.8,
+    reviews: 75,
+    heroImage: "assets/Superhero.jpg",
+    gallery: [
+      "assets/Custom Print Backdrop.jpg",
+      "assets/Foil Star Balloons Set.jpg"
+    ],
+    description: "Unleash the hero within! A thrilling superhero-themed setup with bold colors and action-packed decor.",
+    highlights: {
+      style: "Action / Comic",
+      bestFor: "Kids Birthdays",
+      mood: "Energetic & Fun",
+      capacity: "15–40 Guests"
+    },
+    included: [
+      "Comic book style backdrop",
+      "Superhero balloon pillars",
+      "Action-packed table styling",
+      "Custom hero signage"
+    ],
+    perfectFor: [
+      "Kids Birthday",
+      "Boys Party"
+    ],
+    relatedThemes: [
+      "jungle-safari",
+      "unicorn-magic"
+    ]
+  },
+  {
+    id: "neon-glow-party",
+    name: "Neon Glow Party",
+    category: "Birthday / Adult",
+    price: 14000,
+    rating: 4.9,
+    reviews: 110,
+    heroImage: "assets/Neon Sign Happy Birthday.jpg",
+    gallery: [
+      "assets/Fairy Light Backdrop 2x2m 4.jpg",
+      "assets/Metallic Fringe Curtain.jpg"
+    ],
+    description: "Light up the night with glowing neon signs and vibrant colors. The perfect setup for an unforgettable, energetic evening celebration.",
+    highlights: {
+      style: "Neon / Nightclub",
+      bestFor: "Adult Birthdays",
+      mood: "Vibrant & Energetic",
+      capacity: "20–60 Guests"
+    },
+    included: [
+      "Custom Neon 'Happy Birthday' sign",
+      "Glow-in-the-dark balloons",
+      "UV lighting setup",
+      "Glowing table centerpieces"
+    ],
+    perfectFor: [
+      "Adult Birthday",
+      "Night Party",
+      "Teen Birthday"
+    ],
+    relatedThemes: [
+      "festival-lights",
+      "bohemian-dream"
     ]
   }
 ];

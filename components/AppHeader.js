@@ -16,21 +16,6 @@ class AppHeader extends HTMLElement {
       <li><a href="login.html?redirect=services.html" class="btn btn-accent w-full mt-2" style="justify-content: center;">Plan My Event</a></li>
     `;
 
-    if (isAuth) {
-      authLinks = `
-        <li><a href="dashboard.html" class="nav-login">Dashboard</a></li>
-        <li><a href="services.html" class="btn btn-accent ms-2">Plan My Event</a></li>
-        <li><a href="#" class="btn btn-primary nav-logout ms-2">Logout</a></li>
-      `;
-      authLinksMobile = `
-        <li class="mt-4 d-flex gap-4">
-          <a href="dashboard.html" class="btn btn-primary w-full" style="justify-content: center;">Dashboard</a>
-          <a href="#" class="btn nav-logout w-full" style="border: 1px solid var(--danger); color: var(--danger); justify-content: center;">Logout</a>
-        </li>
-        <li><a href="services.html" class="btn btn-accent w-full mt-2" style="justify-content: center;">Plan My Event</a></li>
-      `;
-    }
-
     const logoSvg = `
       <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
         <circle cx="20" cy="20" r="19" fill="currentColor"/>
@@ -48,7 +33,7 @@ class AppHeader extends HTMLElement {
           <nav class="desktop-nav">
             <ul class="nav-links d-flex gap-4 align-center">
               <li class="dropdown">
-                <a href="#" class="d-flex align-center gap-1 dropdown-toggle">Home <i class="bi bi-chevron-down" style="font-size: 0.75rem;"></i></a>
+                <a href="#" class="d-flex align-center gap-2 dropdown-toggle">Home <i class="bi bi-chevron-down" style="font-size: 0.75rem;"></i></a>
                 <ul class="dropdown-menu card">
                   <li><a href="index.html">Home 1 (Classic)</a></li>
                   <li><a href="index-2.html">Home 2 (Creative)</a></li>
@@ -59,12 +44,13 @@ class AppHeader extends HTMLElement {
               <li><a href="packages.html">Packages</a></li>
               <li><a href="vendors.html">Vendors</a></li>
               <li><a href="about.html">About</a></li>
+              <li><a href="contact.html">Contact</a></li>
               
-              <li class="d-flex gap-2 align-center ms-4">
+              <div class="ms-4" style="width: 1px; height: 24px; background: var(--shadow-dark-color); margin: 0 0.5rem;"></div>
+              <li class="d-flex gap-2 align-center">
                 <button class="icon-btn theme-toggle" title="Toggle Dark Mode"><i class="bi bi-moon"></i></button>
                 <button class="icon-btn rtl-toggle" title="Toggle RTL"><i class="bi bi-translate"></i></button>
               </li>
-              <div style="width: 1px; height: 24px; background: var(--shadow-dark-color); margin: 0 0.5rem;"></div>
               ${authLinks}
             </ul>
           </nav>
@@ -95,6 +81,7 @@ class AppHeader extends HTMLElement {
             <li><a href="packages.html">Packages</a></li>
             <li><a href="vendors.html">Vendors</a></li>
             <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
             ${authLinksMobile}
           </ul>
         </div>
@@ -124,6 +111,27 @@ class AppHeader extends HTMLElement {
       .nav-links { list-style: none; margin: 0; padding: 0; }
       .nav-links a:not(.btn) { font-weight: 500; color: var(--text-dark); }
       .nav-links a:not(.btn):hover { color: var(--accent-color); }
+      .nav-links a.active-nav,
+      .mobile-nav-links a.active-nav,
+      .mobile-dropdown-toggle.active-nav {
+        color: var(--accent-color) !important;
+        font-weight: 700;
+      }
+      .nav-links > li > a.active-nav,
+      .nav-links > li.dropdown > a.active-nav {
+        position: relative;
+      }
+      .nav-links > li > a.active-nav::after,
+      .nav-links > li.dropdown > a.active-nav::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        bottom: -0.7rem;
+        left: 0;
+        height: 2px;
+        border-radius: var(--radius-full);
+        background: var(--accent-color);
+      }
       
       /* Desktop Dropdown Styles */
       .dropdown { position: relative; padding: 0.5rem 0; }
@@ -144,7 +152,7 @@ class AppHeader extends HTMLElement {
       .dropdown-menu li a { display: block; padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-weight: 500; }
       .dropdown-menu li a:hover { background: var(--bg-color); box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
 
-      .nav-login, .nav-signup { padding: 0.5rem 1rem; border-radius: var(--radius-full); box-shadow: var(--neo-shadow-sm); transition: var(--transition); }
+      .nav-login, .nav-signup { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 1.75rem; border-radius: var(--radius-full); box-shadow: var(--neo-shadow-sm); transition: var(--transition); font-weight: 600; font-size: 1rem; }
       .nav-login:hover, .nav-signup:hover { box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
       .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--bg-color); box-shadow: var(--neo-shadow-sm); color: var(--text-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
       .icon-btn:hover { box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
@@ -170,6 +178,26 @@ class AppHeader extends HTMLElement {
       }
     `;
     this.appendChild(style);
+
+    // Mark the matching navigation item so visitors can always see their current section.
+    const currentPage = window.location.pathname.split("/").pop() || "index.html";
+    const activeSection = currentPage.startsWith("service-details") ? "services.html"
+      : currentPage.startsWith("theme-details") ? "themes.html"
+      : ["index.html", "index-2.html"].includes(currentPage) ? "home"
+      : currentPage;
+    const setActive = (selector) => {
+      this.querySelectorAll(selector).forEach(link => {
+        link.classList.add("active-nav");
+        link.setAttribute("aria-current", "page");
+      });
+    };
+
+    if (activeSection === "home") {
+      setActive(".dropdown-toggle, .mobile-dropdown-toggle");
+      setActive(`a[href="${currentPage}"]`);
+    } else {
+      setActive(`a[href="${activeSection}"]`);
+    }
 
     const btn = this.querySelector(".mobile-menu-btn");
     const mobileNav = this.querySelector(".mobile-nav");
