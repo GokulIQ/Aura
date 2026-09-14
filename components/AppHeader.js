@@ -5,13 +5,11 @@ class AppHeader extends HTMLElement {
     
     let authLinks = `
       <li><a href="login.html" class="nav-login">Login</a></li>
-      <li><a href="register.html" class="nav-signup">Sign Up</a></li>
       <li><a href="login.html?redirect=services.html" class="btn btn-accent ms-2">Plan My Event</a></li>
     `;
     let authLinksMobile = `
       <li class="mt-4 d-flex gap-4">
         <a href="login.html" class="btn w-full" style="border: 1px solid var(--shadow-dark-color); justify-content: center;">Login</a>
-        <a href="register.html" class="btn btn-primary w-full" style="justify-content: center;">Sign Up</a>
       </li>
       <li><a href="login.html?redirect=services.html" class="btn btn-accent w-full mt-2" style="justify-content: center;">Plan My Event</a></li>
     `;
