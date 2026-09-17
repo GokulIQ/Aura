@@ -4,15 +4,32 @@ class AppHeader extends HTMLElement {
     const isAuth = localStorage.getItem("festivo_auth") === "true";
     
     let authLinks = `
+      <li><a href="dashboard.html" class="nav-login">Dashboard</a></li>
       <li><a href="login.html" class="nav-login">Login</a></li>
-      <li><a href="login.html?redirect=services.html" class="btn btn-accent ms-2">Plan My Event</a></li>
+      <li><a href="contact.html" class="btn btn-accent ms-2">Plan My Event</a></li>
     `;
     let authLinksMobile = `
       <li class="mt-4 d-flex gap-4">
+        <a href="dashboard.html" class="btn w-full" style="border: 1px solid var(--shadow-dark-color); justify-content: center;">Dashboard</a>
         <a href="login.html" class="btn w-full" style="border: 1px solid var(--shadow-dark-color); justify-content: center;">Login</a>
       </li>
-      <li><a href="login.html?redirect=services.html" class="btn btn-accent w-full mt-2" style="justify-content: center;">Plan My Event</a></li>
+      <li><a href="contact.html" class="btn btn-accent w-full mt-2" style="justify-content: center;">Plan My Event</a></li>
     `;
+
+    if (isAuth) {
+      authLinks = `
+        <li><a href="dashboard.html" class="nav-login">Dashboard</a></li>
+        <li><a href="#" class="nav-login nav-logout ms-2">Logout</a></li>
+        <li><a href="contact.html" class="btn btn-accent ms-2">Plan My Event</a></li>
+      `;
+      authLinksMobile = `
+        <li class="mt-4 d-flex gap-4">
+          <a href="dashboard.html" class="btn btn-primary w-full" style="justify-content: center;">Dashboard</a>
+          <a href="#" class="btn nav-logout w-full" style="border: 1px solid var(--danger); color: var(--danger); justify-content: center;">Logout</a>
+        </li>
+        <li><a href="contact.html" class="btn btn-accent w-full mt-2" style="justify-content: center;">Plan My Event</a></li>
+      `;
+    }
 
     const logoSvg = `
       <svg class="logo-mark" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
@@ -24,10 +41,12 @@ class AppHeader extends HTMLElement {
     this.innerHTML = `
       <header class="app-header">
         <div class="container d-flex align-center justify-between">
+          
           <a href="index.html" class="logo d-flex align-center text-accent" aria-label="Aura home">
             ${logoSvg}
             <h2 class="serif" style="margin-bottom: 0;">Aura.</h2>
           </a>
+          
           <nav class="desktop-nav">
             <ul class="nav-links d-flex gap-4 align-center">
               <li class="dropdown">
@@ -43,15 +62,20 @@ class AppHeader extends HTMLElement {
               <li><a href="vendors.html">Vendors</a></li>
               <li><a href="about.html">About</a></li>
               <li><a href="contact.html">Contact</a></li>
-              
-              <div class="ms-4" style="width: 1px; height: 24px; background: var(--shadow-dark-color); margin: 0 0.5rem;"></div>
-              <li class="d-flex gap-2 align-center">
-                <button class="icon-btn theme-toggle" title="Toggle Dark Mode"><i class="bi bi-moon"></i></button>
-                <button class="icon-btn rtl-toggle" title="Toggle RTL"><i class="bi bi-translate"></i></button>
-              </li>
-              ${authLinks}
             </ul>
           </nav>
+          
+          <div class="desktop-actions d-flex align-center gap-4">
+            <div class="d-flex gap-2 align-center">
+              <button class="icon-btn theme-toggle" title="Toggle Dark Mode"><i class="bi bi-moon"></i></button>
+              <button class="icon-btn rtl-toggle" title="Toggle RTL"><i class="bi bi-translate"></i></button>
+            </div>
+            <div style="width: 1px; height: 24px; background: var(--shadow-dark-color);"></div>
+            <ul class="d-flex gap-2 align-center" style="margin:0; padding:0; list-style:none;">
+              ${authLinks}
+            </ul>
+          </div>
+
           <div class="d-flex align-center gap-2">
             <div class="mobile-only-icons">
               <button class="icon-btn theme-toggle"><i class="bi bi-moon"></i></button>
@@ -61,6 +85,7 @@ class AppHeader extends HTMLElement {
               <i class="bi bi-list"></i>
             </button>
           </div>
+          
         </div>
         
         <div class="mobile-nav">
@@ -150,9 +175,10 @@ class AppHeader extends HTMLElement {
       .dropdown-menu li a { display: block; padding: 0.5rem 1rem; border-radius: var(--radius-sm); font-weight: 500; }
       .dropdown-menu li a:hover { background: var(--bg-color); box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
 
-      .nav-login, .nav-signup { display: inline-flex; align-items: center; justify-content: center; padding: 0.875rem 1.75rem; border-radius: var(--radius-full); box-shadow: var(--neo-shadow-sm); transition: var(--transition); font-weight: 600; font-size: 1rem; }
+      .nav-login, .nav-signup { display: inline-flex; align-items: center; justify-content: center; padding: 0.6rem 1.25rem; border-radius: var(--radius-full); box-shadow: var(--neo-shadow-sm); transition: var(--transition); font-weight: 600; font-size: 0.95rem; white-space: nowrap; }
       .nav-login:hover, .nav-signup:hover { box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
-      .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--bg-color); box-shadow: var(--neo-shadow-sm); color: var(--text-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); }
+      .app-header .btn { padding: 0.6rem 1.25rem; font-size: 0.95rem; white-space: nowrap; }
+      .icon-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: var(--bg-color); box-shadow: var(--neo-shadow-sm); color: var(--text-dark); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: var(--transition); flex-shrink: 0; }
       .icon-btn:hover { box-shadow: var(--neo-inset-sm); color: var(--accent-color); }
       .ms-2 { margin-inline-start: 0.5rem; }
       .ms-4 { margin-inline-start: 1rem; }
@@ -169,8 +195,7 @@ class AppHeader extends HTMLElement {
       
       .mobile-only-icons { display: none; }
       @media (max-width: 1024px) {
-
-        .desktop-nav { display: none; }
+        .desktop-nav, .desktop-actions { display: none !important; }
         .mobile-only-icons { display: flex; gap: 0.5rem; }
         .mobile-menu-btn { display: flex; align-items: center; justify-content: center; }
       }
@@ -266,11 +291,11 @@ class AppHeader extends HTMLElement {
 
     // Update global "Plan My Event" buttons dynamically
     setTimeout(() => {
-      const planBtns = document.querySelectorAll('a[href="dashboard.html"]');
+      const planBtns = document.querySelectorAll('a');
       planBtns.forEach(btn => {
         const text = btn.textContent.trim().toLowerCase();
         if (text === "plan my event" || text === "start planning" || text === "start planning now") {
-          btn.href = isAuth ? "services.html" : "login.html?redirect=services.html";
+          btn.href = "contact.html";
         }
       });
     }, 0);

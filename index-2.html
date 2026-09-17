@@ -69,9 +69,11 @@
     .home-page .section-header { margin-bottom: 2.5rem; }
     .home-page .final-cta { padding-top: 2.5rem; padding-bottom: 3rem; }
     .home-page + app-footer .app-footer { margin-top: 2rem; }
+    .final-cta-content { padding: 4rem; text-align: left; }
     @media (max-width: 768px) {
       .home-page .section { padding: 3rem 0; }
       .home-page .final-cta { padding-top: 2rem; padding-bottom: 2.5rem; }
+      .final-cta-content { padding: 2.5rem 1.5rem; text-align: center; }
     }
   </style>
 </head>
@@ -134,27 +136,27 @@
         </div>
         <div class="grid grid-cols-3 gap-6">
           <a href="service-details-wedding.html" class="card card-inset text-center" style="display:block">
-             <img src="assets/Weddings.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Weddings">
+             <img src="assets/Royal Wedding.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Weddings">
              <h3 class="serif">Weddings</h3>
           </a>
           <a href="service-details-anniversary.html" class="card card-inset text-center" style="display:block">
-             <img src="assets/Anniversaries.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Anniversaries">
+             <img src="assets/Golden Anniversary (50th).jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Anniversaries">
              <h3 class="serif">Anniversaries</h3>
           </a>
           <a href="service-details-baby.html" class="card card-inset text-center" style="display:block">
-             <img src="assets/Baby Showers.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Baby Showers">
+             <img src="assets/Pink Blossom.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Baby Showers">
              <h3 class="serif">Baby Showers</h3>
           </a>
           <a href="service-details-corporate.html" class="card card-inset text-center" style="display:block">
-             <img src="assets/Corporate.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Corporate Events">
+             <img src="assets/Product Launch.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Corporate Events">
              <h3 class="serif">Corporate Events</h3>
           </a>
           <a href="service-details-festival.html" class="card card-inset text-center" style="display:block">
-             <img src="assets/Festivals.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Festivals">
+             <img src="assets/Holi Colours.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Festivals">
              <h3 class="serif">Festivals</h3>
           </a>
           <a href="themes.html" class="card card-inset text-center" style="display:block">
-             <img src="assets/Birthdays.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Birthdays">
+             <img src="assets/Pastel Birthday.jpg" style="border-radius:var(--radius-md); aspect-ratio:3/2; object-fit:cover; margin-bottom:1rem;" alt="Birthdays">
              <h3 class="serif">Birthdays</h3>
           </a>
         </div>
@@ -187,13 +189,48 @@
           <h2 class="serif section-title">Our Moments</h2>
           <p class="section-subtitle">A glimpse into the magical events we've brought to life.</p>
         </div>
-        <div class="grid gap-4" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); grid-auto-rows: 200px; grid-auto-flow: dense;">
-           <img src="assets/Boho Celebration.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-md); grid-row: span 2;" alt="Gallery Image">
-           <img src="assets/Rustic Romance.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-md);" alt="Gallery Image">
-           <img src="assets/Minimal White Wedding.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-md); grid-column: span 2;" alt="Gallery Image">
-           <img src="assets/Diwali Glow.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-md);" alt="Gallery Image">
-           <img src="assets/Corporate.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-md);" alt="Gallery Image">
-           <img src="assets/Team Celebration.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-md);" alt="Team celebration event">
+        <style>
+          .moments-grid {
+             display: grid;
+             gap: 1.5rem;
+             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+             grid-auto-rows: 250px;
+             grid-auto-flow: dense;
+          }
+          .moments-item {
+             position: relative;
+             border-radius: var(--radius-lg);
+             overflow: hidden;
+             box-shadow: var(--neo-shadow-sm);
+             transition: var(--transition);
+          }
+          .moments-item:hover {
+             transform: translateY(-5px);
+             box-shadow: var(--neo-shadow-lg);
+          }
+          .moments-item img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+             transition: transform 0.5s ease;
+          }
+          .moments-item:hover img {
+             transform: scale(1.05);
+          }
+          .span-row-2 { grid-row: span 2; }
+          .span-col-2 { grid-column: span 2; }
+          @media (max-width: 600px) {
+             .span-col-2 { grid-column: span 1; }
+             .span-row-2 { grid-row: span 1; }
+          }
+        </style>
+        <div class="moments-grid">
+           <div class="moments-item span-row-2"><img src="assets/Boho Celebration.jpg" alt="Gallery Image"></div>
+           <div class="moments-item"><img src="assets/Rustic Romance.jpg" alt="Gallery Image"></div>
+           <div class="moments-item span-col-2"><img src="assets/Minimal White Wedding.jpg" alt="Gallery Image"></div>
+           <div class="moments-item"><img src="assets/Diwali Glow.jpg" alt="Gallery Image"></div>
+           <div class="moments-item"><img src="assets/Corporate.jpg" alt="Gallery Image"></div>
+           <div class="moments-item"><img src="assets/Team Celebration.jpg" alt="Team celebration event"></div>
         </div>
       </div>
     </section>
@@ -201,10 +238,17 @@
     <!-- Final CTA -->
     <section class="section final-cta">
       <div class="container">
-        <div class="card card-inset text-center py-12">
-          <h2 class="serif mb-4" style="font-size: 2.5rem;">Let's Make Your Next Celebration Unforgettable.</h2>
-          <p class="text-muted mb-8" style="font-size: 1.125rem;">Start your journey with our premium planning portal today.</p>
-          <a href="dashboard.html" class="btn btn-accent btn-lg" style="padding: 1rem 3rem; font-size: 1.125rem;">Start Planning</a>
+        <div class="card card-inset overflow-hidden" style="padding: 0;">
+          <div class="grid grid-cols-2 align-center" style="gap: 0;">
+            <div class="final-cta-content">
+              <h2 class="serif mb-4" style="font-size: 2.5rem;">Let's Make Your Next Celebration Unforgettable.</h2>
+              <p class="text-muted mb-8" style="font-size: 1.125rem;">Start your journey with our premium planning portal today. Discover bespoke themes and top-rated vendors.</p>
+              <a href="dashboard.html" class="btn btn-accent btn-lg" style="padding: 1rem 3rem; font-size: 1.125rem;">Start Planning</a>
+            </div>
+            <div style="height: 100%; min-height: 400px; position: relative;">
+              <img src="assets/Diwali Glow.jpg" alt="Premium Event Celebration" style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0;">
+            </div>
+          </div>
         </div>
       </div>
     </section>
